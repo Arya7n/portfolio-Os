@@ -12,9 +12,7 @@ export default function TerminalApp() {
   const openApp = useOsStore((s) => s.openApp);
   const setRecruiterMode = useOsStore((s) => s.setRecruiterMode);
   const developerMode = useOsStore((s) => s.developerMode);
-  const processes = useOsStore((s) =>
-    s.windows.map((win) => ({ filename: win.filename, title: win.title, appId: win.appId })),
-  );
+  const windows = useOsStore((s) => s.windows);
   const [lines, setLines] = useState<Line[]>([{ kind: "sys", text: "ARYAN v2.0 · type help" }]);
   const [value, setValue] = useState("");
   const history = useRef<string[]>([]);
@@ -34,7 +32,10 @@ export default function TerminalApp() {
     setValue("");
     setLines((current) => [...current, { kind: "in", text: `$ ${input}` }]);
 
-    const result = runCommand(input, { developerMode, processes });
+    const result = runCommand(input, {
+      developerMode,
+      processes: windows.map((win) => ({ filename: win.filename, title: win.title, appId: win.appId })),
+    });
 
     if (result.action?.type === "clear") {
       setLines([]);

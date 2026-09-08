@@ -1,4 +1,4 @@
-import { Component, lazy, Suspense, type ReactNode } from "react";
+import { Component, lazy, Suspense, useMemo, type ReactNode } from "react";
 import { Atmosphere } from "@/components/desktop/Atmosphere";
 import { useIsMobile } from "@/hooks/useMediaQuery";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
@@ -29,7 +29,7 @@ export function SceneBackdrop() {
   const reduced = usePrefersReducedMotion();
   const show3d = useOsStore((s) => s.show3d);
   const wallpaper = useOsStore((s) => s.wallpaper);
-  const webgl = typeof window !== "undefined" && hasWebGL();
+  const webgl = useMemo(() => typeof window !== "undefined" && hasWebGL(), []);
   const use3d = show3d && wallpaper !== "custom" && !mobile && !reduced && webgl;
 
   if (wallpaper === "custom") {

@@ -1,9 +1,18 @@
 import { useLayoutEffect, useMemo, useRef, type ReactNode } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { Color, GridHelper, type Group, type Mesh, type Points } from "three";
+import { Color, Fog, GridHelper, type Group, type Mesh, type Points } from "three";
 import { getSceneTheme, type SceneTheme } from "@/data/themes";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import { useOsStore } from "@/store/osStore";
+
+const CANVAS_DPR: [number, number] = [1, 1.4];
+const CANVAS_GL = { antialias: false, alpha: false, powerPreference: "low-power" as const };
+const CANVAS_CAMERA = {
+  position: [0, 1.2, 8.5] as [number, number, number],
+  fov: 42,
+  near: 0.1,
+  far: 40,
+};
 
 function Particles({ count, color }: { count: number; color: string }) {
   const ref = useRef<Points>(null);
@@ -16,6 +25,7 @@ function Particles({ count, color }: { count: number; color: string }) {
     }
     return data;
   }, [count]);
+  const positionArgs = useMemo(() => [positions, 3] as const, [positions]);
 
   useFrame((state) => {
     if (!ref.current) return;
@@ -25,7 +35,7 @@ function Particles({ count, color }: { count: number; color: string }) {
   return (
     <points ref={ref}>
       <bufferGeometry>
-        <bufferAttribute attach="attributes-position" args={[positions, 3]} />
+        <bufferAttribute attach="attributes-position" args={positionArgs} />
       </bufferGeometry>
       <pointsMaterial
         size={0.03}
@@ -149,11 +159,19 @@ function Drift({ reduced, theme }: { reduced: boolean; theme: SceneTheme }) {
 
 function ThemeStage({ theme }: { theme: SceneTheme }) {
   const gl = useThree((state) => state.gl);
+  const scene = useThree((state) => state.scene);
   const grid = useRef<GridHelper>(null);
+  const gridArgs = useMemo(
+    () => [22, 28, theme.grid, theme.grid] as [number, number, string, string],
+    [theme.grid],
+  );
 
   useLayoutEffect(() => {
-    gl.setClearColor(theme.void, 1);
-  }, [gl, theme.void]);
+    const background = new Color(theme.void);
+    gl.setClearColor(background, 1);
+    scene.background = background;
+    scene.fog = new Fog(theme.fog, 9, 20);
+  }, [gl, scene, theme.fog, theme.void]);
 
   useLayoutEffect(() => {
     const material = grid.current?.material;
@@ -166,8 +184,6 @@ function ThemeStage({ theme }: { theme: SceneTheme }) {
 
   return (
     <>
-      <color attach="background" args={[theme.void]} />
-      <fog attach="fog" args={[theme.fog, 9, 20]} />
       <ambientLight intensity={0.38} />
       <directionalLight position={[3.2, 4.4, 2.4]} intensity={0.62} color={theme.light} />
       <spotLight
@@ -182,12 +198,7 @@ function ThemeStage({ theme }: { theme: SceneTheme }) {
         <circleGeometry args={[18, 64]} />
         <meshStandardMaterial color={theme.floor} roughness={0.96} metalness={0.02} />
       </mesh>
-      <gridHelper
-        ref={grid}
-        key={theme.id}
-        args={[22, 28, theme.grid, theme.grid]}
-        position={[0, -1.55, 0]}
-      />
+      <gridHelper ref={grid} args={gridArgs} position={[0, -1.55, 0]} />
     </>
   );
 }
@@ -218,12 +229,14 @@ export default function OsScene() {
   return (
     <div className="pointer-events-none absolute inset-0 z-0" aria-hidden="true">
       <Canvas
-        dpr={[1, 1.4]}
-        gl={{ antialias: false, alpha: false, powerPreference: "low-power" }}
-        camera={{ position: [0, 1.2, 8.5], fov: 42, near: 0.1, far: 40 }}
+        dpr={CANVAS_DPR}
+        gl={CANVAS_GL}
+        camera={CANVAS_CAMERA}
         frameloop={reduced ? "demand" : "always"}
-        onCreated={({ gl }) => {
-          gl.setClearColor(theme.void, 1);
+        onCreated={({ gl, scene }) => {
+          const background = new Color(theme.void);
+          gl.setClearColor(background, 1);
+          scene.background = background;
         }}
       >
         <ThemeStage theme={theme} />
