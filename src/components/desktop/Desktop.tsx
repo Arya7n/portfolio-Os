@@ -4,6 +4,7 @@ import { MobileLauncher } from "@/components/desktop/MobileLauncher";
 import { WallpaperLayer } from "@/components/desktop/WallpaperLayer";
 import { SceneBackdrop } from "@/components/scene/SceneBackdrop";
 import { DesktopIcon } from "@/components/desktop/DesktopIcon";
+import { DesktopWidgets } from "@/components/desktop/DesktopWidgets";
 import { Taskbar } from "@/components/desktop/Taskbar";
 import { TopBar } from "@/components/desktop/TopBar";
 import { NotificationHost } from "@/components/notifications/NotificationHost";
@@ -144,6 +145,7 @@ export function Desktop() {
             </div>
           </div>
         )}
+        {!mobile && <DesktopWidgets />}
         <WindowManager />
       </div>
 
