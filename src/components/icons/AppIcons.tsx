@@ -134,6 +134,21 @@ export function SettingsIcon({ className }: IconProps) {
   );
 }
 
+export function SnakeIcon({ className }: IconProps) {
+  return (
+    <Frame className={className}>
+      <path
+        d="M7 21c0-3.4 2.6-5.2 5.4-5.2h5.2c2.6 0 4.4-1.8 4.4-4.2 0-2.3-1.8-4-4-4"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+      />
+      <circle cx="22" cy="7.6" r="1.5" fill="currentColor" />
+      <path d="M9.2 21h3.2" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+    </Frame>
+  );
+}
+
 export function OsMark({ className }: IconProps) {
   return (
     <Frame className={className}>
@@ -155,6 +170,7 @@ const icons: Record<AppId, (props: IconProps) => ReactNode> = {
   contact: ContactIcon,
   files: FilesIcon,
   settings: SettingsIcon,
+  snake: SnakeIcon,
 };
 
 export function AppIcon({ id, className }: { id: AppId; className?: string }) {

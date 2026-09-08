@@ -8,7 +8,8 @@ export type AppId =
   | "github"
   | "contact"
   | "files"
-  | "settings";
+  | "settings"
+  | "snake";
 
 export interface DesktopApp {
   id: AppId;
@@ -19,6 +20,7 @@ export interface DesktopApp {
   defaultHeight: number;
   phase: 1 | 2 | 3;
   onDesktop?: boolean;
+  secret?: boolean;
 }
 
 export const desktopApps: DesktopApp[] = [
@@ -120,9 +122,29 @@ export const desktopApps: DesktopApp[] = [
     defaultHeight: 560,
     phase: 3,
   },
+  {
+    id: "snake",
+    filename: "snake.exe",
+    title: "Snake",
+    description: "Hidden arcade",
+    defaultWidth: 420,
+    defaultHeight: 520,
+    phase: 3,
+    secret: true,
+  },
 ];
 
 export const desktopShortcuts = desktopApps.filter((app) => app.onDesktop);
+
+export function listedApps(query = ""): DesktopApp[] {
+  const q = query.trim().toLowerCase();
+  return desktopApps.filter((app) => {
+    const hay = `${app.title} ${app.filename} ${app.description}`.toLowerCase();
+    if (app.secret && !q) return false;
+    if (!q) return true;
+    return hay.includes(q);
+  });
+}
 
 export function getApp(id: AppId): DesktopApp {
   const app = desktopApps.find((item) => item.id === id);

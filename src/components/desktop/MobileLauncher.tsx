@@ -1,5 +1,5 @@
 import { AppIcon } from "@/components/icons/AppIcons";
-import { desktopApps } from "@/data/apps";
+import { listedApps } from "@/data/apps";
 import { useOsStore } from "@/store/osStore";
 
 export function MobileLauncher() {
@@ -14,7 +14,7 @@ export function MobileLauncher() {
       <p className="font-mono text-[11px] tracking-[0.2em] text-os-muted">ARYAN OS</p>
       <h2 className="mt-2 font-display text-2xl font-semibold">Applications</h2>
       <div className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2">
-        {desktopApps.map((app) => (
+        {listedApps().map((app) => (
           <button
             key={app.id}
             type="button"

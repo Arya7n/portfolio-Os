@@ -10,12 +10,13 @@ interface Line {
 
 export default function TerminalApp() {
   const openApp = useOsStore((s) => s.openApp);
+  const setRecruiterMode = useOsStore((s) => s.setRecruiterMode);
   const developerMode = useOsStore((s) => s.developerMode);
-  const [lines, setLines] = useState<Line[]>([
-    { kind: "sys", text: "ARYAN OS v2.0 · type help" },
-  ]);
+  const processes = useOsStore((s) =>
+    s.windows.map((win) => ({ filename: win.filename, title: win.title, appId: win.appId })),
+  );
+  const [lines, setLines] = useState<Line[]>([{ kind: "sys", text: "ARYAN OS v2.0 · type help" }]);
   const [value, setValue] = useState("");
-  const [busy, setBusy] = useState(false);
   const history = useRef<string[]>([]);
   const historyIndex = useRef(-1);
   const scroller = useRef<HTMLDivElement>(null);
@@ -23,37 +24,20 @@ export default function TerminalApp() {
 
   useEffect(() => {
     scroller.current?.scrollTo({ top: scroller.current.scrollHeight });
-  }, [lines, busy]);
+  }, [lines]);
 
   const submit = (raw: string) => {
     const input = raw.trim();
-    if (!input || busy) return;
+    if (!input) return;
     history.current = [...history.current, input];
     historyIndex.current = -1;
     setValue("");
-    setLines((current) => [...current, { kind: "in", text: `> ${input}` }]);
+    setLines((current) => [...current, { kind: "in", text: `$ ${input}` }]);
 
-    const result = runCommand(input, developerMode);
+    const result = runCommand(input, { developerMode, processes });
 
     if (result.action?.type === "clear") {
       setLines([]);
-      return;
-    }
-
-    if (result.action?.type === "scan") {
-      setBusy(true);
-      setLines((current) => [...current, { kind: "sys", text: "Scanning filesystem..." }]);
-      window.setTimeout(() => {
-        setLines((current) => [
-          ...current,
-          { kind: "sys", text: "████████████████████ 100%" },
-          { kind: "sys", text: "Projects found." },
-          { kind: "sys", text: "" },
-          ...result.lines.map((text) => ({ kind: "out" as const, text })),
-        ]);
-        setBusy(false);
-        openApp("projects");
-      }, 520);
       return;
     }
 
@@ -62,6 +46,9 @@ export default function TerminalApp() {
     }
     if (result.action?.type === "open") {
       openApp(result.action.appId);
+    }
+    if (result.action?.type === "hire") {
+      setRecruiterMode(true);
     }
   };
 
@@ -90,7 +77,6 @@ export default function TerminalApp() {
             {line.text || " "}
           </pre>
         ))}
-        {busy && <p className="text-os-muted">working…</p>}
       </div>
       <form
         className="flex items-center gap-2 border-t border-white/8 px-4 py-2"
@@ -100,13 +86,12 @@ export default function TerminalApp() {
         }}
       >
         <label htmlFor="terminal-input" className="text-os-accent">
-          {">"}
+          $
         </label>
         <input
           id="terminal-input"
           ref={inputRef}
           value={value}
-          disabled={busy}
           autoComplete="off"
           spellCheck={false}
           aria-label="Terminal command"

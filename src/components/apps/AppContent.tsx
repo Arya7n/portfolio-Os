@@ -13,6 +13,7 @@ const SkillsApp = lazy(() => import("@/components/apps/SkillsApp").then((m) => (
 const TerminalApp = lazy(() => import("@/components/apps/TerminalApp"));
 const GithubApp = lazy(() => import("@/components/apps/GithubApp"));
 const ContactApp = lazy(() => import("@/components/apps/ContactApp"));
+const SnakeApp = lazy(() => import("@/components/apps/SnakeApp"));
 
 function ModuleFallback() {
   return (
@@ -45,6 +46,8 @@ export function AppContent({ appId }: { appId: AppId }) {
         return <FilesApp />;
       case "settings":
         return <SettingsApp />;
+      case "snake":
+        return <SnakeApp />;
       default:
         return <ModuleFallback />;
     }

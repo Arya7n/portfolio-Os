@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import type { AppId } from "@/data/apps";
-import { desktopApps } from "@/data/apps";
+import { listedApps, type AppId } from "@/data/apps";
 import { projects } from "@/data/projects";
 import { experience } from "@/data/experience";
 import { AppIcon } from "@/components/icons/AppIcons";
@@ -23,15 +22,12 @@ export function Spotlight() {
 
   const results = useMemo(() => {
     const q = query.trim().toLowerCase();
-    const apps = desktopApps
-      .filter(
-        (app) =>
-          !q ||
-          app.title.toLowerCase().includes(q) ||
-          app.filename.toLowerCase().includes(q) ||
-          app.description.toLowerCase().includes(q),
-      )
-      .map((app) => ({ id: app.id, label: app.title, meta: app.filename, kind: "app" as const }));
+    const apps = listedApps(query).map((app) => ({
+      id: app.id,
+      label: app.title,
+      meta: app.filename,
+      kind: "app" as const,
+    }));
     const projectHits = projects
       .filter((project) => !q || project.name.toLowerCase().includes(q) || project.description.toLowerCase().includes(q))
       .slice(0, 5)

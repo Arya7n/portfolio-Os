@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { AppIcon, OsMark } from "@/components/icons/AppIcons";
-import { desktopApps } from "@/data/apps";
+import { listedApps } from "@/data/apps";
 import type { AppId } from "@/data/apps";
 import { cn } from "@/lib/cn";
 import { useOsStore } from "@/store/osStore";
@@ -23,10 +23,7 @@ export function Taskbar() {
   const runningUnpinned = windows.filter((win) => !PINNED.includes(win.appId));
   const filteredApps = useMemo(() => {
     const q = query.trim().toLowerCase();
-    if (!q) return desktopApps;
-    return desktopApps.filter(
-      (app) => app.filename.toLowerCase().includes(q) || app.title.toLowerCase().includes(q),
-    );
+    return listedApps(q);
   }, [query]);
 
   return (
