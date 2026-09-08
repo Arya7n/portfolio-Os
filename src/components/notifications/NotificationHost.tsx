@@ -6,7 +6,7 @@ export function NotificationHost() {
   const dismissNotification = useOsStore((s) => s.dismissNotification);
 
   return (
-    <div className="pointer-events-none absolute right-3 top-14 z-[80] flex w-[min(100%-24px,320px)] flex-col gap-2">
+    <div className="pointer-events-none absolute right-3 top-12 z-[80] flex w-[min(100%-24px,320px)] flex-col gap-2">
       <AnimatePresence>
         {notifications.map((item) => (
           <motion.div

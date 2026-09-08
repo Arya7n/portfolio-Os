@@ -1,12 +1,10 @@
-import { useState } from "react";
-import { OsMark } from "@/components/icons/AppIcons";
+import { useState, type ReactNode, type SVGProps } from "react";
 import { CalendarPanel } from "@/components/os/CalendarPanel";
 import { NotificationCenter } from "@/components/os/NotificationCenter";
 import { profile } from "@/data/profile";
 import { useClock } from "@/hooks/useClock";
 import { cn } from "@/lib/cn";
 import { useOsStore } from "@/store/osStore";
-import type { ReactNode } from "react";
 
 export function TopBar() {
   const setRecruiterMode = useOsStore((s) => s.setRecruiterMode);
@@ -23,20 +21,19 @@ export function TopBar() {
   const active = windows.find((win) => win.id === activeId && !win.minimized);
 
   return (
-    <header className="relative z-40 flex h-10 items-center justify-between border-b border-white/8 bg-black/25 px-3 backdrop-blur-2xl sm:px-4">
-      <div className="relative flex min-w-0 items-center gap-3">
+    <header className="relative z-40 flex h-9 items-center justify-between bg-black/20 px-2.5 backdrop-blur-2xl">
+      <div className="relative flex min-w-0 items-center gap-2.5">
         <button
           type="button"
           className={cn(
-            "flex items-center gap-1.5 rounded-md px-1.5 py-0.5 text-os-text hover:bg-white/8",
+            "rounded-md px-1.5 py-0.5 text-[13px] font-medium tracking-tight text-os-text/95 hover:bg-white/8",
             menuOpen && "bg-white/10",
           )}
           aria-expanded={menuOpen}
           aria-haspopup="menu"
           onClick={() => setMenuOpen((open) => !open)}
         >
-          <OsMark className="h-3.5 w-3.5" />
-          <span className="text-[13px] font-semibold">Aryan</span>
+          Aryan
         </button>
         {menuOpen && (
           <>
@@ -46,7 +43,10 @@ export function TopBar() {
               aria-label="Close system menu"
               onClick={() => setMenuOpen(false)}
             />
-            <div className="glass-panel absolute left-0 top-full z-50 mt-1 min-w-48 overflow-hidden rounded-xl py-1" role="menu">
+            <div
+              className="glass-panel absolute left-0 top-full z-50 mt-1 min-w-44 overflow-hidden rounded-xl py-1"
+              role="menu"
+            >
               <MenuItem
                 label="About"
                 onClick={() => {
@@ -68,7 +68,7 @@ export function TopBar() {
                   setMenuOpen(false);
                 }}
               />
-              <div className="my-1 h-px bg-white/10" />
+              <div className="my-1 h-px bg-white/8" />
               <MenuItem
                 label="Recruiter Mode"
                 onClick={() => {
@@ -86,42 +86,43 @@ export function TopBar() {
             </div>
           </>
         )}
-        {active && <span className="hidden truncate text-[13px] text-os-muted md:inline">{active.title}</span>}
+        {active && (
+          <span className="hidden min-w-0 truncate text-[13px] text-os-muted md:inline">{active.title}</span>
+        )}
       </div>
 
-      <div className="flex items-center gap-0.5">
-        <button
-          type="button"
+      <div className="flex items-center">
+        <StatusButton
+          label="Search"
+          active={false}
           onClick={() => setSpotlight(true)}
-          className="hidden rounded-md px-2 py-1 text-[12px] text-os-muted hover:bg-white/8 sm:inline"
+          className="hidden sm:flex"
         >
-          Search
-        </button>
-        <button
-          type="button"
-          aria-label="Network"
-          onClick={() => setTray("net")}
-          className={cn("rounded-md px-2 py-1 text-[12px] text-os-muted hover:bg-white/8", tray === "net" && "bg-white/10 text-os-text")}
-        >
-          Wi-Fi
-        </button>
-        <button
-          type="button"
-          aria-label="Notifications"
-          onClick={() => setTray("notify")}
-          className={cn("rounded-md px-2 py-1 text-[12px] text-os-muted hover:bg-white/8", tray === "notify" && "bg-white/10 text-os-text")}
-        >
-          {unread ? unread : "•"}
-        </button>
-        <button
-          type="button"
-          aria-label="Calendar"
+          <IconSearch />
+        </StatusButton>
+        <StatusButton label="Wi-Fi" active={tray === "net"} onClick={() => setTray("net")}>
+          <IconWifi />
+        </StatusButton>
+        <StatusButton label="Notifications" active={tray === "notify"} onClick={() => setTray("notify")}>
+          <span className="relative">
+            <IconBell />
+            {unread > 0 && (
+              <span className="absolute -right-0.5 -top-0.5 h-1.5 w-1.5 rounded-full bg-os-accent" />
+            )}
+          </span>
+        </StatusButton>
+        <StatusButton
+          label={`${date} ${time}`}
+          active={tray === "clock"}
           onClick={() => setTray("clock")}
-          className={cn("rounded-md px-2 py-1 text-[12px] tabular-nums hover:bg-white/8", tray === "clock" && "bg-white/10")}
-          title={date}
+          className="px-2"
         >
-          {date} {time}
-        </button>
+          <span className="text-[12px] font-medium tabular-nums tracking-tight text-os-text/90">
+            {date}
+            <span className="mx-1.5 text-os-muted/70">·</span>
+            {time}
+          </span>
+        </StatusButton>
       </div>
 
       {tray === "clock" && (
@@ -136,10 +137,17 @@ export function TopBar() {
       )}
       {tray === "net" && (
         <TrayFlyout onClose={() => setTray(null)}>
-          <div className="w-64 p-3 text-sm">
-            <p className="font-medium">Wi-Fi</p>
-            <p className="mt-2 text-xs text-os-ok">Connected</p>
-            <p className="mt-1 text-xs text-os-muted">{profile.location}</p>
+          <div className="w-56 p-4">
+            <div className="flex items-center gap-2.5">
+              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-os-accent text-white">
+                <IconWifi className="h-4 w-4" />
+              </span>
+              <div>
+                <p className="text-sm font-medium">Wi-Fi</p>
+                <p className="text-[11px] text-os-ok">Connected</p>
+              </div>
+            </div>
+            <p className="mt-3 text-[12px] text-os-muted">{profile.location}</p>
           </div>
         </TrayFlyout>
       )}
@@ -147,9 +155,44 @@ export function TopBar() {
   );
 }
 
+function StatusButton({
+  label,
+  active,
+  onClick,
+  children,
+  className,
+}: {
+  label: string;
+  active: boolean;
+  onClick: () => void;
+  children: ReactNode;
+  className?: string;
+}) {
+  return (
+    <button
+      type="button"
+      aria-label={label}
+      title={label}
+      onClick={onClick}
+      className={cn(
+        "flex h-7 items-center justify-center rounded-md px-1.5 text-os-muted/90 transition hover:bg-white/8 hover:text-os-text",
+        active && "bg-white/10 text-os-text",
+        className,
+      )}
+    >
+      {children}
+    </button>
+  );
+}
+
 function MenuItem({ label, onClick }: { label: string; onClick: () => void }) {
   return (
-    <button type="button" role="menuitem" className="block w-full px-3 py-1.5 text-left text-sm hover:bg-os-accent/20" onClick={onClick}>
+    <button
+      type="button"
+      role="menuitem"
+      className="block w-full px-3 py-1.5 text-left text-[13px] hover:bg-white/8"
+      onClick={onClick}
+    >
       {label}
     </button>
   );
@@ -159,7 +202,41 @@ function TrayFlyout({ children, onClose }: { children: ReactNode; onClose: () =>
   return (
     <>
       <button type="button" className="fixed inset-0 z-40 cursor-default" aria-label="Close tray" onClick={onClose} />
-      <div className="glass-panel absolute right-2 top-full z-50 mt-1 overflow-hidden rounded-xl">{children}</div>
+      <div className="glass-panel absolute right-2 top-full z-50 mt-1.5 overflow-hidden rounded-2xl">{children}</div>
     </>
+  );
+}
+
+function IconSearch(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 16 16" className="h-3.5 w-3.5" fill="none" aria-hidden="true" {...props}>
+      <circle cx="7" cy="7" r="4.2" stroke="currentColor" strokeWidth="1.4" />
+      <path d="M10.2 10.2 13 13" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function IconWifi(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 16 16" className="h-3.5 w-3.5" fill="none" aria-hidden="true" {...props}>
+      <path d="M2.6 7.2c3-3 7.8-3 10.8 0" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+      <path d="M4.6 9.4c1.9-1.9 4.9-1.9 6.8 0" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+      <path d="M6.6 11.5c.8-.8 2-.8 2.8 0" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+      <circle cx="8" cy="13.2" r="0.7" fill="currentColor" />
+    </svg>
+  );
+}
+
+function IconBell(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 16 16" className="h-3.5 w-3.5" fill="none" aria-hidden="true" {...props}>
+      <path
+        d="M8 2.6a3.4 3.4 0 0 1 3.4 3.4v2.1l.9 1.8H3.7l.9-1.8V6A3.4 3.4 0 0 1 8 2.6Z"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinejoin="round"
+      />
+      <path d="M6.4 13.1a1.6 1.6 0 0 0 3.2 0" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+    </svg>
   );
 }

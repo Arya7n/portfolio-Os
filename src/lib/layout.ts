@@ -1,4 +1,4 @@
-export const TOPBAR_HEIGHT = 40;
+export const TOPBAR_HEIGHT = 36;
 export const TASKBAR_HEIGHT = 72;
 export const MOBILE_BREAKPOINT = 768;
 

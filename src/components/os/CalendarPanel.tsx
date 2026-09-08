@@ -9,21 +9,25 @@ export function CalendarPanel() {
   const today = now.getDate();
   const cells = Array.from({ length: first + days }, (_, i) => (i < first ? null : i - first + 1));
   const label = now.toLocaleDateString(undefined, { month: "long", year: "numeric" });
+  const weekday = now.toLocaleDateString(undefined, { weekday: "long" });
 
   return (
-    <div className="w-64 p-3">
-      <p className="mb-2 font-medium">{label}</p>
-      <div className="grid grid-cols-7 gap-1 text-center font-mono text-[10px] text-os-muted">
-        {["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map((d) => (
-          <span key={d}>{d}</span>
+    <div className="w-[260px] p-4">
+      <p className="text-[11px] uppercase tracking-[0.14em] text-os-muted">{weekday}</p>
+      <p className="mt-0.5 text-[15px] font-medium">{label}</p>
+      <div className="mt-3 grid grid-cols-7 gap-y-1 text-center text-[11px]">
+        {["S", "M", "T", "W", "T", "F", "S"].map((d, i) => (
+          <span key={`${d}-${i}`} className="h-6 text-os-muted/70">
+            {d}
+          </span>
         ))}
         {cells.map((day, i) => (
           <span
             key={i}
             className={
               day === today
-                ? "inline-flex h-6 w-6 items-center justify-center justify-self-center rounded-full bg-os-accent text-white"
-                : "inline-flex h-6 w-6 items-center justify-center justify-self-center text-os-text"
+                ? "inline-flex h-7 w-7 items-center justify-center justify-self-center rounded-full bg-os-accent text-[12px] text-white"
+                : "inline-flex h-7 w-7 items-center justify-center justify-self-center text-[12px] text-os-text/85"
             }
           >
             {day ?? ""}

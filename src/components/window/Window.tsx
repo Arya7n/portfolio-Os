@@ -1,4 +1,4 @@
-import { useRef, useState, type PointerEvent } from "react";
+import { useRef, useState, type PointerEvent, type ReactNode } from "react";
 import { AppIcon } from "@/components/icons/AppIcons";
 import { AppContent } from "@/components/apps/AppContent";
 import { TASKBAR_HEIGHT, TOPBAR_HEIGHT, WINDOW_MIN_HEIGHT, WINDOW_MIN_WIDTH } from "@/lib/layout";
@@ -110,33 +110,37 @@ export function Window({ win }: WindowProps) {
         />
       )}
       <header
-        className="flex h-11 shrink-0 cursor-grab items-center gap-3 border-b border-white/8 px-3 active:cursor-grabbing"
+        className="flex h-10 shrink-0 cursor-grab items-center gap-2 px-1.5 active:cursor-grabbing"
         onPointerDown={onTitlePointerDown}
         onPointerMove={onTitlePointerMove}
         onPointerUp={onTitlePointerUp}
         onDoubleClick={() => toggleMaximize(win.id)}
       >
-        <div className="flex items-center gap-1.5">
-          <TrafficLight
-            label={`Close ${win.filename}`}
-            color="bg-[#ff5f57] hover:brightness-110"
-            onClick={() => closeWindow(win.id)}
-          />
-          <TrafficLight
-            label={`Minimize ${win.filename}`}
-            color="bg-[#febc2e] hover:brightness-110"
-            onClick={() => minimizeWindow(win.id)}
-          />
-          <TrafficLight
-            label={maximized ? `Restore ${win.filename}` : `Maximize ${win.filename}`}
-            color="bg-[#28c840] hover:brightness-110"
-            onClick={() => toggleMaximize(win.id)}
-          />
-        </div>
-        <h2 id={`${win.id}-title`} className="min-w-0 flex-1 truncate text-center text-[13px] font-medium">
+        <AppIcon id={win.appId} className="ml-1.5 h-3.5 w-3.5 shrink-0 text-os-muted" />
+        <h2 id={`${win.id}-title`} className="min-w-0 flex-1 truncate text-[13px] font-medium text-os-text/80">
           {win.title}
         </h2>
-        <AppIcon id={win.appId} className="h-4 w-4 text-os-muted" />
+        <div className="flex shrink-0 items-center">
+          <WindowControl
+            label={`Minimize ${win.filename}`}
+            onClick={() => minimizeWindow(win.id)}
+          >
+            <IconMinimize />
+          </WindowControl>
+          <WindowControl
+            label={maximized ? `Restore ${win.filename}` : `Maximize ${win.filename}`}
+            onClick={() => toggleMaximize(win.id)}
+          >
+            {maximized ? <IconRestore /> : <IconMaximize />}
+          </WindowControl>
+          <WindowControl
+            label={`Close ${win.filename}`}
+            danger
+            onClick={() => closeWindow(win.id)}
+          >
+            <IconClose />
+          </WindowControl>
+        </div>
       </header>
 
       <div className="min-h-0 flex-1 overflow-auto">
@@ -159,26 +163,68 @@ export function Window({ win }: WindowProps) {
   );
 }
 
-function TrafficLight({
+function WindowControl({
   label,
-  color,
   onClick,
+  children,
+  danger,
 }: {
   label: string;
-  color: string;
   onClick: () => void;
+  children: ReactNode;
+  danger?: boolean;
 }) {
   return (
     <button
       type="button"
       aria-label={label}
+      title={label}
       onClick={(event) => {
         event.stopPropagation();
         onClick();
       }}
       onPointerDown={(event) => event.stopPropagation()}
-      className={cn("h-3 w-3 rounded-full", color)}
-    />
+      className={cn(
+        "flex h-8 w-8 items-center justify-center rounded-lg text-os-muted transition",
+        "hover:bg-white/8 hover:text-os-text",
+        danger && "hover:bg-[#ff453a]/15 hover:text-[#ff453a]",
+      )}
+    >
+      {children}
+    </button>
+  );
+}
+
+function IconClose() {
+  return (
+    <svg viewBox="0 0 16 16" className="h-3.5 w-3.5" aria-hidden="true">
+      <path d="M4.2 4.2l7.6 7.6M11.8 4.2l-7.6 7.6" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function IconMinimize() {
+  return (
+    <svg viewBox="0 0 16 16" className="h-3.5 w-3.5" aria-hidden="true">
+      <path d="M3.5 8h9" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function IconMaximize() {
+  return (
+    <svg viewBox="0 0 16 16" className="h-3.5 w-3.5" aria-hidden="true">
+      <rect x="4" y="4" width="8" height="8" rx="1.4" fill="none" stroke="currentColor" strokeWidth="1.4" />
+    </svg>
+  );
+}
+
+function IconRestore() {
+  return (
+    <svg viewBox="0 0 16 16" className="h-3.5 w-3.5" aria-hidden="true">
+      <path d="M6 6.2V4.8A.8.8 0 0 1 6.8 4h4.4A.8.8 0 0 1 12 4.8v4.4a.8.8 0 0 1-.8.8H9.8" fill="none" stroke="currentColor" strokeWidth="1.3" />
+      <rect x="4" y="6.2" width="5.8" height="5.8" rx="1.1" fill="none" stroke="currentColor" strokeWidth="1.3" />
+    </svg>
   );
 }
 
