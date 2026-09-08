@@ -49,8 +49,8 @@ export function BootScreen() {
       className="relative flex h-full min-h-dvh flex-col overflow-hidden bg-[#07090d] text-os-text"
       aria-label="ARYAN OS boot"
     >
-      <div className="pointer-events-none absolute inset-0 opacity-40" aria-hidden="true">
-        <div className="horizon-grid absolute -bottom-[40%] left-[-15%] h-[85%] w-[130%] opacity-35" />
+      <div className="pointer-events-none absolute inset-0 opacity-30" aria-hidden="true">
+        <div className="horizon-grid absolute -bottom-[40%] left-[-15%] h-[85%] w-[130%] opacity-25" />
         <div className="noise absolute inset-0" />
       </div>
 

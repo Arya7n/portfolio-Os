@@ -1,7 +1,5 @@
-import { useEffect } from "react";
 import { projects } from "@/data/projects";
 import { githubProfile } from "@/data/socials";
-import { useOsStore } from "@/store/osStore";
 
 function languagePresence() {
   const counts = new Map<string, number>();
@@ -13,19 +11,10 @@ function languagePresence() {
   return [...counts.entries()].sort((a, b) => b[1] - a[1]);
 }
 
-let githubNotified = false;
-
 export default function GithubApp() {
   const languages = languagePresence();
   const featured = projects.filter((project) => project.featured);
   const max = languages[0]?.[1] ?? 1;
-  const pushNotification = useOsStore((s) => s.pushNotification);
-
-  useEffect(() => {
-    if (githubNotified) return;
-    githubNotified = true;
-    pushNotification("GitHub", "Repository index loaded.");
-  }, [pushNotification]);
 
   return (
     <div className="space-y-5 p-5 text-sm">

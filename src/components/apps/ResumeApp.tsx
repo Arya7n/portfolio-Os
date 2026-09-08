@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { experience } from "@/data/experience";
 import { profile } from "@/data/profile";
 import { projects } from "@/data/projects";
@@ -7,18 +6,9 @@ import { socials } from "@/data/socials";
 import { downloadResume } from "@/lib/resumeDownload";
 import { useOsStore } from "@/store/osStore";
 
-let resumeNotified = false;
-
 export function ResumeApp() {
   const setRecruiterMode = useOsStore((s) => s.setRecruiterMode);
-  const pushNotification = useOsStore((s) => s.pushNotification);
   const featured = projects.filter((project) => project.featured);
-
-  useEffect(() => {
-    if (resumeNotified) return;
-    resumeNotified = true;
-    pushNotification("Resume", "Resume loaded.");
-  }, [pushNotification]);
 
   return (
     <div className="flex min-h-full flex-col">

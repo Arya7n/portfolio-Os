@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import { SCENE_THEMES } from "@/data/themes";
 import { wallpapers } from "@/data/wallpapers";
 import { cn } from "@/lib/cn";
 import { fileToWallpaper } from "@/lib/wallpaper";
@@ -60,14 +61,26 @@ export function SettingsApp() {
               type="button"
               onClick={() => {
                 setWallpaper(paper.id);
-                pushNotification("Display", `Wallpaper: ${paper.label}`);
               }}
-            className={cn(
+              className={cn(
                 "overflow-hidden rounded-xl border text-left",
                 wallpaper === paper.id ? "border-os-accent" : "border-os-line hover:border-os-muted",
               )}
             >
-              <span className={cn("block h-16 w-full", `wall-${paper.id}`)} />
+              <span className="relative block h-16 w-full overflow-hidden" style={{ background: SCENE_THEMES[paper.id].void }}>
+                <span
+                  className="absolute inset-0 opacity-40"
+                  style={{
+                    backgroundImage: `linear-gradient(${SCENE_THEMES[paper.id].grid} 1px, transparent 1px), linear-gradient(90deg, ${SCENE_THEMES[paper.id].grid} 1px, transparent 1px)`,
+                    backgroundSize: "14px 14px",
+                    maskImage: "linear-gradient(to top, black, transparent 85%)",
+                  }}
+                />
+                <span
+                  className="absolute inset-x-0 bottom-0 h-px"
+                  style={{ background: SCENE_THEMES[paper.id].accent, opacity: 0.55 }}
+                />
+              </span>
               <span className="block px-2 py-1.5">
                 <span className="block text-xs">{paper.label}</span>
                 <span className="block font-mono text-[10px] text-os-muted">{paper.note}</span>
@@ -118,7 +131,6 @@ export function SettingsApp() {
                     className="block w-full"
                     onClick={() => {
                       setCustomWallpaper(item.id);
-                      pushNotification("Display", item.name);
                     }}
                   >
                     <span

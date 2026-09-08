@@ -6,21 +6,12 @@ import { cn } from "@/lib/cn";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import { useOsStore } from "@/store/osStore";
 
-let projectsNotified = false;
-
 export function ProjectsApp() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [showAll, setShowAll] = useState(false);
-  const pushNotification = useOsStore((s) => s.pushNotification);
   const setFocusedProjectId = useOsStore((s) => s.setFocusedProjectId);
   const selected = projects.find((project) => project.id === selectedId) ?? null;
   const visible = showAll ? projects : projects.filter((project) => project.featured);
-
-  useEffect(() => {
-    if (projectsNotified) return;
-    projectsNotified = true;
-    pushNotification("Projects", "Projects loaded.");
-  }, [pushNotification]);
 
   useEffect(() => {
     setFocusedProjectId(selectedId);

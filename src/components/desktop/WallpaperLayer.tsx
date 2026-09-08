@@ -1,4 +1,4 @@
-import { cn } from "@/lib/cn";
+import { getSceneTheme } from "@/data/themes";
 import { BUILT_IN_WALLPAPERS, type BuiltInWallpaperId } from "@/data/wallpapers";
 import { useOsStore } from "@/store/osStore";
 
@@ -12,6 +12,7 @@ export function WallpaperLayer({ dim = false }: { dim?: boolean }) {
     wallpaper !== "custom" && (BUILT_IN_WALLPAPERS as string[]).includes(wallpaper)
       ? (wallpaper as BuiltInWallpaperId)
       : "harbor";
+  const theme = getSceneTheme(builtIn);
 
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
@@ -21,7 +22,7 @@ export function WallpaperLayer({ dim = false }: { dim?: boolean }) {
           style={{ backgroundImage: `url(${customUrl})` }}
         />
       ) : (
-        <div className={cn("absolute inset-0", `wall-${builtIn}`)} />
+        <div className="absolute inset-0" style={{ background: theme.void }} />
       )}
       <div className="noise absolute inset-0" />
       {dim && <div className="absolute inset-0 bg-gradient-to-r from-os-void via-os-void/70 to-os-void/25" />}

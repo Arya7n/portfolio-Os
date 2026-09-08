@@ -8,10 +8,10 @@ export interface CustomWallpaper {
 }
 
 export const wallpapers: Array<{ id: BuiltInWallpaperId; label: string; note: string }> = [
-  { id: "harbor", label: "Harbor", note: "Cool blue, default" },
-  { id: "ember", label: "Ember", note: "GNOME purple" },
-  { id: "slate", label: "Slate", note: "Adwaita dark" },
-  { id: "noir", label: "Noir", note: "Near black" },
+  { id: "harbor", label: "Harbor", note: "Quiet navy" },
+  { id: "ember", label: "Ember", note: "Warm graphite" },
+  { id: "slate", label: "Slate", note: "Neutral gray" },
+  { id: "noir", label: "Noir", note: "Absolute black" },
 ];
 
 export const BUILT_IN_WALLPAPERS: BuiltInWallpaperId[] = wallpapers.map((item) => item.id);

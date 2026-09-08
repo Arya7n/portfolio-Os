@@ -42,8 +42,7 @@ export function SceneBackdrop() {
 
   return (
     <SceneErrorBoundary fallback={<Atmosphere />}>
-      <Atmosphere showGrid={false} />
-      <Suspense fallback={null}>
+      <Suspense fallback={<Atmosphere />}>
         <OsScene />
       </Suspense>
     </SceneErrorBoundary>

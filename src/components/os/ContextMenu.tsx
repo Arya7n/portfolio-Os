@@ -9,7 +9,6 @@ export function ContextMenu() {
   const wallpaper = useOsStore((s) => s.wallpaper);
   const setRecruiterMode = useOsStore((s) => s.setRecruiterMode);
   const lock = useOsStore((s) => s.lock);
-  const pushNotification = useOsStore((s) => s.pushNotification);
 
   if (!menu) return null;
 
@@ -17,7 +16,6 @@ export function ContextMenu() {
     const current = wallpaper === "custom" ? -1 : BUILT_IN_WALLPAPERS.indexOf(wallpaper);
     const next = BUILT_IN_WALLPAPERS[(Math.max(current, -1) + 1) % BUILT_IN_WALLPAPERS.length];
     setWallpaper(next);
-    pushNotification("Display", `Wallpaper: ${next}`);
     closeChrome();
   };
 
@@ -56,7 +54,6 @@ export function ContextMenu() {
         closeChrome();
       })}
       {item("Refresh desktop", () => {
-        pushNotification("Finder", "Desktop refreshed.");
         closeChrome();
       })}
       <div className="my-1 h-px bg-white/10" />

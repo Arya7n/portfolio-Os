@@ -185,7 +185,6 @@ export const useOsStore = create<OsStore>((set, get) => ({
   enterDesktop: () => {
     if (get().phase === "desktop") return;
     set({ phase: "desktop" });
-    get().pushNotification("ARYAN OS", "Welcome to ARYAN OS.");
   },
 
   setRecruiterMode: (open) => set({ recruiterMode: open, launcherOpen: false, spotlightOpen: false }),

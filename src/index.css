@@ -50,7 +50,7 @@ textarea {
 .os-root {
   height: 100%;
   min-height: 100dvh;
-  background: #0b1016;
+  background: #07090d;
 }
 
 .glass-panel {
@@ -64,23 +64,15 @@ textarea {
 }
 
 .wall-harbor {
-  background:
-    radial-gradient(ellipse at 18% 8%, rgba(10, 132, 255, 0.22), transparent 46%),
-    radial-gradient(ellipse at 88% 100%, rgba(40, 60, 110, 0.28), transparent 42%),
-    linear-gradient(180deg, #0b1016 0%, #07090d 100%);
+  background: #07090d;
 }
 
 .wall-ember {
-  background:
-    radial-gradient(ellipse at 78% 8%, rgba(192, 97, 203, 0.3), transparent 44%),
-    radial-gradient(ellipse at 12% 92%, rgba(53, 132, 228, 0.22), transparent 40%),
-    #1e1e2e;
+  background: #0b0908;
 }
 
 .wall-slate {
-  background:
-    radial-gradient(ellipse at 50% 0%, rgba(255, 255, 255, 0.06), transparent 52%),
-    #241f31;
+  background: #0c0c0e;
 }
 
 .wall-noir {
@@ -89,17 +81,17 @@ textarea {
 
 .horizon-grid {
   background-image:
-    linear-gradient(rgba(10, 132, 255, 0.07) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(10, 132, 255, 0.07) 1px, transparent 1px);
-  background-size: 48px 48px;
-  transform: perspective(900px) rotateX(58deg) scale(1.35);
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 56px 56px;
+  transform: perspective(1100px) rotateX(62deg) scale(1.28);
   transform-origin: center top;
-  mask-image: linear-gradient(to bottom, transparent 0%, black 18%, black 55%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, black 22%, black 52%, transparent 100%);
 }
 
 .noise {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
-  opacity: 0.035;
+  opacity: 0.02;
   pointer-events: none;
 }
 
