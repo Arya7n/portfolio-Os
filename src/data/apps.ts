@@ -33,8 +33,8 @@ export const desktopApps: DesktopApp[] = [
     filename: "experience.exe",
     title: "Experience",
     description: "Professional timeline",
-    defaultWidth: 640,
-    defaultHeight: 560,
+    defaultWidth: 820,
+    defaultHeight: 620,
     phase: 2,
   },
   {
@@ -42,8 +42,8 @@ export const desktopApps: DesktopApp[] = [
     filename: "projects.exe",
     title: "Projects",
     description: "Repository explorer",
-    defaultWidth: 720,
-    defaultHeight: 560,
+    defaultWidth: 880,
+    defaultHeight: 640,
     phase: 2,
   },
   {
@@ -51,8 +51,8 @@ export const desktopApps: DesktopApp[] = [
     filename: "skills.exe",
     title: "Skills",
     description: "Technology graph",
-    defaultWidth: 640,
-    defaultHeight: 520,
+    defaultWidth: 880,
+    defaultHeight: 640,
     phase: 2,
   },
   {
@@ -69,8 +69,8 @@ export const desktopApps: DesktopApp[] = [
     filename: "resume.pdf",
     title: "Resume",
     description: "Resume viewer",
-    defaultWidth: 640,
-    defaultHeight: 720,
+    defaultWidth: 720,
+    defaultHeight: 740,
     phase: 2,
   },
   {

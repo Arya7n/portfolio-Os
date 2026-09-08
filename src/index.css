@@ -123,10 +123,22 @@ textarea {
   }
 }
 
-.boot-caret::after {
-  content: "█";
-  margin-left: 4px;
-  animation: boot-caret 1s steps(1) infinite;
+@keyframes arch-packet {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(18px);
+    opacity: 0;
+  }
+}
+
+.arch-packet {
+  animation: arch-packet 1.4s ease-in-out infinite;
 }
 
 @media print {

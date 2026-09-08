@@ -4,6 +4,7 @@ import { profile } from "@/data/profile";
 import { projects } from "@/data/projects";
 import { skills } from "@/data/skills";
 import { socials } from "@/data/socials";
+import { downloadResume } from "@/lib/resumeDownload";
 import { useOsStore } from "@/store/osStore";
 
 export function RecruiterMode() {
@@ -17,6 +18,13 @@ export function RecruiterMode() {
         <div className="mb-8 flex flex-wrap items-center justify-between gap-3">
           <p className="font-mono text-[11px] tracking-[0.22em] text-os-accent">RECRUITER MODE</p>
           <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={downloadResume}
+              className="rounded-full border border-white/12 px-3 py-1.5 text-xs tracking-[0.12em]"
+            >
+              Download resume
+            </button>
             <button
               type="button"
               onClick={() => window.print()}

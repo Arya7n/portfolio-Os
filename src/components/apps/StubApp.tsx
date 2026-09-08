@@ -1,7 +1,4 @@
 import { getApp, type AppId } from "@/data/apps";
-import { experience } from "@/data/experience";
-import { projects } from "@/data/projects";
-import { skills } from "@/data/skills";
 import { githubProfile } from "@/data/socials";
 import { useOsStore } from "@/store/osStore";
 
@@ -18,45 +15,9 @@ export function StubApp({ appId }: { appId: AppId }) {
       </div>
 
       <p className="rounded-xl border border-white/8 bg-white/[0.03] p-3 font-mono text-xs leading-relaxed text-os-muted">
-        Kernel module staged for a later system update. Core identity is live in about.exe. Recruiter
-        Mode has the full scan-friendly resume.
+        This module is scheduled for a later system update. Experience, projects, skills, and resume
+        are already online.
       </p>
-
-      {appId === "experience" && (
-        <ul className="space-y-3">
-          {experience.map((role) => (
-            <li key={role.id} className="border-l border-os-accent/40 pl-3">
-              <p className="text-sm font-medium">{role.company}</p>
-              <p className="text-xs text-os-muted">
-                {role.role} · {role.start} – {role.end}
-              </p>
-            </li>
-          ))}
-        </ul>
-      )}
-
-      {appId === "projects" && (
-        <ul className="space-y-2">
-          {projects
-            .filter((project) => project.featured)
-            .map((project) => (
-              <li key={project.id} className="flex items-baseline justify-between gap-3">
-                <span>{project.name}</span>
-                <span className="font-mono text-[11px] text-os-muted">{project.language}</span>
-              </li>
-            ))}
-        </ul>
-      )}
-
-      {appId === "skills" && (
-        <div className="flex flex-wrap gap-2">
-          {skills.flatMap((group) => group.items).slice(0, 14).map((item) => (
-            <span key={item} className="rounded-full border border-white/10 px-2.5 py-1 text-xs">
-              {item}
-            </span>
-          ))}
-        </div>
-      )}
 
       {appId === "github" && (
         <div className="space-y-2 text-sm">

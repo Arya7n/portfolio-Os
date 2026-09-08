@@ -1,3 +1,10 @@
+export interface ArchitectureNode {
+  id: string;
+  label: string;
+  summary: string;
+  points: string[];
+}
+
 export interface Project {
   id: string;
   name: string;
@@ -10,8 +17,11 @@ export interface Project {
   topics: string[];
   featured: boolean;
   stars?: number;
-  architecture?: string[];
+  problem?: string;
   features?: string[];
+  architecture?: string[];
+  architectureNodes?: ArchitectureNode[];
+  status?: string;
 }
 
 export const projects: Project[] = [
@@ -36,6 +46,8 @@ export const projects: Project[] = [
     topics: ["docker", "nestjs", "networking", "nginx", "pnpm", "reverse-proxy"],
     featured: true,
     stars: 2,
+    problem:
+      "Expose a local application on a public HTTPS URL without depending on a closed third-party tunnel service.",
     architecture: [
       "Local application",
       "CLI",
@@ -44,6 +56,68 @@ export const projects: Project[] = [
       "Redis + PostgreSQL",
       "Public subdomain",
       "Next.js dashboard",
+    ],
+    architectureNodes: [
+      {
+        id: "local",
+        label: "Local Application",
+        summary: "The service running on the developer machine.",
+        points: ["Listens on localhost", "Receives forwarded HTTP requests"],
+      },
+      {
+        id: "cli",
+        label: "CLI",
+        summary: "devtunnel expose — starts and maintains the tunnel session.",
+        points: [
+          "Login and API key authorization",
+          "Subdomain registration",
+          "Automatic reconnection",
+        ],
+      },
+      {
+        id: "ws",
+        label: "WebSocket",
+        summary: "Real-time tunnel communication between CLI and server.",
+        points: [
+          "Secure CLI–server channel",
+          "Request and response forwarding",
+          "Persistent session",
+        ],
+      },
+      {
+        id: "server",
+        label: "NestJS Tunnel Server",
+        summary: "Tunnel engine, auth, and public request ingress.",
+        points: [
+          "JWT authentication",
+          "Dynamic subdomain routing",
+          "Request forwarding",
+        ],
+      },
+      {
+        id: "redis",
+        label: "Redis",
+        summary: "Live tunnel registry and fast metadata lookup.",
+        points: ["Tunnel state", "Metadata caching", "Fast lookup"],
+      },
+      {
+        id: "postgres",
+        label: "PostgreSQL",
+        summary: "Persistent storage via Prisma.",
+        points: ["Tunnel metadata", "User and session information"],
+      },
+      {
+        id: "public",
+        label: "Public Subdomain",
+        summary: "Internet-facing URL for the local app.",
+        points: ["HTTPS public access", "Maps to an active tunnel session"],
+      },
+      {
+        id: "dashboard",
+        label: "Next.js Dashboard",
+        summary: "Operator UI for tunnels and live traffic.",
+        points: ["Active tunnels", "Live HTTP traffic inspection", "Session management"],
+      },
     ],
     features: [
       "Real-time HTTP tunneling using WebSockets",
@@ -55,6 +129,8 @@ export const projects: Project[] = [
       "Secure CLI-WebSocket communication",
       "Live HTTP traffic inspection",
     ],
+    status:
+      "Auth, Postgres, and Redis live registry are working locally, including tunnels, login, dashboard, and request logs.",
   },
   {
     id: "cartify",
@@ -89,6 +165,7 @@ export const projects: Project[] = [
     ],
     topics: [],
     featured: true,
+    problem: "Make an entire interface change with the selected year, not just a timeline widget.",
     features: [
       "Interactive timeline travel",
       "Keyboard and pointer controls",
