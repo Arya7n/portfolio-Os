@@ -1,0 +1,102 @@
+export type AppId =
+  | "about"
+  | "experience"
+  | "projects"
+  | "skills"
+  | "terminal"
+  | "resume"
+  | "github"
+  | "contact";
+
+export interface DesktopApp {
+  id: AppId;
+  filename: string;
+  title: string;
+  description: string;
+  defaultWidth: number;
+  defaultHeight: number;
+  phase: 1 | 2 | 3;
+}
+
+export const desktopApps: DesktopApp[] = [
+  {
+    id: "about",
+    filename: "about.exe",
+    title: "About",
+    description: "Developer identity and profile",
+    defaultWidth: 560,
+    defaultHeight: 680,
+    phase: 1,
+  },
+  {
+    id: "experience",
+    filename: "experience.exe",
+    title: "Experience",
+    description: "Professional timeline",
+    defaultWidth: 640,
+    defaultHeight: 560,
+    phase: 2,
+  },
+  {
+    id: "projects",
+    filename: "projects.exe",
+    title: "Projects",
+    description: "Repository explorer",
+    defaultWidth: 720,
+    defaultHeight: 560,
+    phase: 2,
+  },
+  {
+    id: "skills",
+    filename: "skills.exe",
+    title: "Skills",
+    description: "Technology graph",
+    defaultWidth: 640,
+    defaultHeight: 520,
+    phase: 2,
+  },
+  {
+    id: "terminal",
+    filename: "terminal.exe",
+    title: "Terminal",
+    description: "Command interface",
+    defaultWidth: 640,
+    defaultHeight: 420,
+    phase: 3,
+  },
+  {
+    id: "resume",
+    filename: "resume.pdf",
+    title: "Resume",
+    description: "Resume viewer",
+    defaultWidth: 640,
+    defaultHeight: 720,
+    phase: 2,
+  },
+  {
+    id: "github",
+    filename: "github.exe",
+    title: "GitHub",
+    description: "Public repositories",
+    defaultWidth: 680,
+    defaultHeight: 540,
+    phase: 3,
+  },
+  {
+    id: "contact",
+    filename: "contact.exe",
+    title: "Contact",
+    description: "Send a transmission",
+    defaultWidth: 480,
+    defaultHeight: 480,
+    phase: 3,
+  },
+];
+
+export function getApp(id: AppId): DesktopApp {
+  const app = desktopApps.find((item) => item.id === id);
+  if (!app) {
+    throw new Error(`Unknown app: ${id}`);
+  }
+  return app;
+}
