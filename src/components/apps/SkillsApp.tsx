@@ -28,8 +28,8 @@ export function SkillsApp() {
     <div className="flex min-h-full flex-col">
       <div className="space-y-3 border-b border-white/8 p-4">
         <div>
-          <p className="text-xs text-os-accent">Skills</p>
-          <p className="mt-1 text-xs text-os-muted">Hover for context. Click a node to pin related systems.</p>
+          <p className="font-mono text-[11px] tracking-[0.2em] text-os-muted">SKILLS</p>
+          <p className="mt-1 text-xs text-os-muted">Click a technology to highlight related systems. No skill percentages.</p>
         </div>
         <div className="flex flex-wrap gap-1.5">
           <FilterChip label="All" active={filter === "all"} onClick={() => setFilter("all")} />

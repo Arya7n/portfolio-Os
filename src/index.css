@@ -4,7 +4,7 @@
   --font-sans: "Inter", "SF Pro Text", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Inter", "SF Pro Display", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, monospace;
-  --color-os-void: #1c1c1e;
+  --color-os-void: #0b1016;
   --color-os-panel: #2c2c2e;
   --color-os-raised: #3a3a3c;
   --color-os-line: #48484a;
@@ -25,7 +25,7 @@ body,
 
 body {
   margin: 0;
-  background: #1c1c1e;
+  background: #0b1016;
   color: #f5f5f7;
   font-family: var(--font-sans);
   overflow: hidden;
@@ -50,7 +50,7 @@ textarea {
 .os-root {
   height: 100%;
   min-height: 100dvh;
-  background: #1c1c1e;
+  background: #0b1016;
 }
 
 .glass-panel {
@@ -65,9 +65,9 @@ textarea {
 
 .wall-harbor {
   background:
-    radial-gradient(ellipse at 18% 0%, rgba(10, 132, 255, 0.42), transparent 48%),
-    radial-gradient(ellipse at 88% 100%, rgba(88, 86, 214, 0.32), transparent 42%),
-    linear-gradient(180deg, #0d1b2e 0%, #1c1c1e 100%);
+    radial-gradient(ellipse at 18% 8%, rgba(10, 132, 255, 0.22), transparent 46%),
+    radial-gradient(ellipse at 88% 100%, rgba(40, 60, 110, 0.28), transparent 42%),
+    linear-gradient(180deg, #0b1016 0%, #07090d 100%);
 }
 
 .wall-ember {

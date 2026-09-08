@@ -12,14 +12,20 @@ export function ProjectsApp() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [showAll, setShowAll] = useState(false);
   const pushNotification = useOsStore((s) => s.pushNotification);
+  const setFocusedProjectId = useOsStore((s) => s.setFocusedProjectId);
   const selected = projects.find((project) => project.id === selectedId) ?? null;
   const visible = showAll ? projects : projects.filter((project) => project.featured);
 
   useEffect(() => {
     if (projectsNotified) return;
     projectsNotified = true;
-    pushNotification("Projects", "New project detected.");
+    pushNotification("Projects", "Projects loaded.");
   }, [pushNotification]);
+
+  useEffect(() => {
+    setFocusedProjectId(selectedId);
+    return () => setFocusedProjectId(null);
+  }, [selectedId, setFocusedProjectId]);
 
   if (selected) {
     return <ProjectDetail project={selected} onBack={() => setSelectedId(null)} />;
@@ -29,19 +35,19 @@ export function ProjectsApp() {
     <div className="space-y-4 p-4">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <p className="text-xs text-os-accent">Projects</p>
+          <p className="font-mono text-[11px] tracking-[0.2em] text-os-muted">PROJECT EXPLORER</p>
           <h3 className="mt-1 font-display text-xl font-medium">Repositories</h3>
         </div>
         <button
           type="button"
           onClick={() => setShowAll((value) => !value)}
-          className="border border-os-line px-3 py-1.5 font-mono text-[11px] text-os-muted hover:text-os-text"
+          className="rounded-full border border-white/12 px-3 py-1.5 font-mono text-[11px] text-os-muted hover:text-os-text"
         >
-          {showAll ? "FEATURED" : "ALL REPOS"}
+          {showAll ? "Featured" : "All repos"}
         </button>
       </div>
 
-      <div className="grid gap-3 [perspective:900px] sm:grid-cols-2">
+      <div className="grid gap-3 sm:grid-cols-2">
         {visible.map((project) => (
           <ProjectCard key={project.id} project={project} onOpen={() => setSelectedId(project.id)} />
         ))}
@@ -57,22 +63,23 @@ function ProjectCard({ project, onOpen }: { project: Project; onOpen: () => void
     <motion.button
       type="button"
       onClick={onOpen}
-      whileHover={
-        reducedMotion
-          ? undefined
-          : { rotateX: -5, rotateY: 7, y: -6, scale: 1.02, transition: { duration: 0.2 } }
-      }
-      style={{ transformStyle: "preserve-3d", perspective: 800 }}
-      className="rounded-xl border border-white/10 bg-white/[0.03] p-4 text-left transition hover:border-os-accent/40"
+      whileHover={reducedMotion ? undefined : { y: -4, scale: 1.01, transition: { duration: 0.18 } }}
+      className="rounded-xl border border-white/10 bg-white/[0.03] p-4 text-left hover:border-white/20"
     >
       <div className="flex items-start justify-between gap-3">
-        <h4 className="font-medium">{project.name}</h4>
-        <span className="font-mono text-[10px] text-os-muted">{project.language}</span>
+        <div>
+          <p className="font-mono text-[10px] text-os-muted">{project.id}.repo</p>
+          <h4 className="mt-1 font-medium">{project.name}</h4>
+        </div>
+        <span className="font-mono text-[10px] text-os-muted">{project.language ?? "—"}</span>
       </div>
       <p className="mt-2 line-clamp-3 text-xs leading-relaxed text-os-muted">
         {project.description || "Public repository on GitHub."}
       </p>
       <div className="mt-3 flex flex-wrap gap-1.5">
+        {project.id === "devtunnel" && (
+          <span className="rounded-full bg-os-accent/15 px-2 py-0.5 text-[10px] text-os-accent">Flagship</span>
+        )}
         {project.technologies.slice(0, 4).map((tech) => (
           <span key={tech} className="rounded-full border border-white/8 px-2 py-0.5 text-[10px] text-os-muted">
             {tech}
@@ -88,7 +95,9 @@ function ProjectDetail({ project, onBack }: { project: Project; onBack: () => vo
     "Overview",
     project.architectureNodes ? "Architecture" : null,
     "Tech stack",
+    project.problem ? "Challenge" : null,
     project.features?.length ? "Features" : null,
+    project.status ? "Results" : null,
     "Links",
   ].filter((tab): tab is string => Boolean(tab));
   const [tab, setTab] = useState(tabs[0]);
@@ -116,8 +125,8 @@ function ProjectDetail({ project, onBack }: { project: Project; onBack: () => vo
             type="button"
             onClick={() => setTab(item)}
             className={cn(
-              "rounded-full px-3 py-1 font-mono text-[11px] tracking-[0.08em]",
-              tab === item ? "bg-os-accent/15 text-os-text" : "text-os-muted hover:text-os-text",
+              "rounded-full px-3 py-1 text-[12px]",
+              tab === item ? "bg-white/10 text-os-text" : "text-os-muted hover:text-os-text",
             )}
           >
             {item}
@@ -131,17 +140,14 @@ function ProjectDetail({ project, onBack }: { project: Project; onBack: () => vo
             <p className="leading-relaxed text-os-text/90">
               {project.description || "No README description is published for this repository."}
             </p>
-            {project.problem && (
-              <div className="rounded-xl border border-white/8 bg-white/[0.03] p-3">
-                <p className="font-mono text-[10px] tracking-[0.2em] text-os-muted">ENGINEERING PROBLEM</p>
-                <p className="mt-2">{project.problem}</p>
-              </div>
-            )}
-            {project.status && (
-              <div className="rounded-xl border border-white/8 bg-white/[0.03] p-3">
-                <p className="font-mono text-[10px] tracking-[0.2em] text-os-muted">STATUS</p>
-                <p className="mt-2">{project.status}</p>
-              </div>
+            {project.architecture && (
+              <ol className="space-y-1 font-mono text-[12px] text-os-muted">
+                {project.architecture.map((step, index) => (
+                  <li key={step}>
+                    {index + 1}. {step}
+                  </li>
+                ))}
+              </ol>
             )}
           </>
         )}
@@ -160,6 +166,13 @@ function ProjectDetail({ project, onBack }: { project: Project; onBack: () => vo
           </ul>
         )}
 
+        {tab === "Challenge" && project.problem && (
+          <div className="rounded-xl border border-white/8 bg-white/[0.03] p-4">
+            <p className="font-mono text-[10px] tracking-[0.18em] text-os-muted">ENGINEERING CHALLENGE</p>
+            <p className="mt-2 leading-relaxed">{project.problem}</p>
+          </div>
+        )}
+
         {tab === "Features" && project.features && (
           <ul className="space-y-2">
             {project.features.map((feature) => (
@@ -171,24 +184,31 @@ function ProjectDetail({ project, onBack }: { project: Project; onBack: () => vo
           </ul>
         )}
 
+        {tab === "Results" && project.status && (
+          <div className="rounded-xl border border-white/8 bg-white/[0.03] p-4">
+            <p className="font-mono text-[10px] tracking-[0.18em] text-os-muted">STATUS</p>
+            <p className="mt-2 leading-relaxed">{project.status}</p>
+          </div>
+        )}
+
         {tab === "Links" && (
           <div className="flex flex-wrap gap-2">
             <a
               href={project.url}
               target="_blank"
               rel="noreferrer"
-              className="rounded-full border border-os-accent/30 bg-os-accent/10 px-3 py-1.5 text-xs"
+              className="rounded-full bg-os-accent px-3 py-1.5 text-xs font-medium text-white"
             >
-              GitHub ↗
+              GitHub
             </a>
             {project.demoUrl && (
               <a
                 href={project.demoUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="rounded-full border border-white/10 px-3 py-1.5 text-xs"
+                className="rounded-full border border-white/12 px-3 py-1.5 text-xs"
               >
-                Live demo ↗
+                Live demo
               </a>
             )}
           </div>

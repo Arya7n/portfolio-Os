@@ -45,8 +45,8 @@ export default function ContactApp() {
   return (
     <form className="space-y-4 p-5 text-sm" onSubmit={(event) => void onSubmit(event)}>
       <div>
-        <p className="text-xs text-os-accent">Contact</p>
-        <h3 className="mt-1 font-display text-2xl font-medium">Send a message</h3>
+        <p className="font-mono text-[11px] tracking-[0.2em] text-os-muted">CONTACT</p>
+        <h3 className="mt-1 font-display text-2xl font-medium">Send a transmission</h3>
         <p className="mt-1 text-xs text-os-muted">
           Goes to{" "}
           <a className="text-os-accent hover:underline" href={`mailto:${contactEmail}`}>
@@ -96,7 +96,7 @@ export default function ContactApp() {
         disabled={sending}
         className="w-full rounded-xl bg-os-accent px-4 py-2.5 text-sm font-medium text-white disabled:opacity-60"
       >
-        {sending ? "Sending…" : "Send"}
+        {sending ? "Sending…" : "Send transmission"}
       </button>
 
       {status && (

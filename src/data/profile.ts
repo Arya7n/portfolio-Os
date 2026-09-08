@@ -14,6 +14,7 @@ export interface Profile {
     cgpa: string;
   };
   status: string;
+  coreStack: string[];
 }
 
 export const profile: Profile = {
@@ -41,4 +42,17 @@ export const profile: Profile = {
     cgpa: "7.5/10",
   },
   status: "Building production systems at PSQUARE",
+  coreStack: [
+    "Node.js",
+    "TypeScript",
+    "NestJS",
+    "React",
+    "Next.js",
+    "Redis",
+    "MongoDB",
+    "PostgreSQL",
+    "Docker",
+    "AWS",
+    "WebSockets",
+  ],
 };

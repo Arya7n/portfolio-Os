@@ -19,21 +19,21 @@ export function DevTunnelArchitecture({ nodes }: { nodes: ArchitectureNode[] }) 
   return (
     <div className="space-y-4">
       <p className="font-mono text-[10px] tracking-[0.2em] text-os-muted">
-        REQUEST PATH · click a node
+        REQUEST PATH · hover or click a node
       </p>
 
-      <div className="space-y-2">
+      <div className="space-y-1">
         <Row ids={[...FLOW]} byId={byId} activeId={activeId} onSelect={setActiveId} />
-        <Connector reducedMotion={reducedMotion} />
+        <Connector reducedMotion={reducedMotion} label="state" />
         <Row ids={[...STORE]} byId={byId} activeId={activeId} onSelect={setActiveId} />
-        <Connector reducedMotion={reducedMotion} />
+        <Connector reducedMotion={reducedMotion} label="edge" />
         <Row ids={[...EDGE]} byId={byId} activeId={activeId} onSelect={setActiveId} />
       </div>
 
       {active && (
-        <div className="rounded-xl border border-os-accent/25 bg-os-accent/8 p-3">
-          <p className="font-mono text-[10px] tracking-[0.2em] text-os-accent">{active.label}</p>
-          <p className="mt-2 text-sm">{active.summary}</p>
+        <div className="rounded-xl border border-white/10 bg-white/[0.04] p-4">
+          <p className="font-mono text-[11px] tracking-[0.16em] text-os-accent">{active.label}</p>
+          <p className="mt-2 text-sm leading-relaxed">{active.summary}</p>
           <ul className="mt-2 space-y-1 text-xs text-os-muted">
             {active.points.map((point) => (
               <li key={point}>· {point}</li>
@@ -63,10 +63,11 @@ function Row({
         if (!node) return null;
         return (
           <div key={id} className="flex items-center gap-2">
-            {index > 0 && <span className="font-mono text-os-muted/70">→</span>}
+            {index > 0 && <span className="font-mono text-[11px] text-os-muted/70">↓</span>}
             <button
               type="button"
               onClick={() => onSelect(id)}
+              onMouseEnter={() => onSelect(id)}
               className={cn(
                 "rounded-lg border px-3 py-2 text-left text-xs transition",
                 activeId === id
@@ -83,10 +84,12 @@ function Row({
   );
 }
 
-function Connector({ reducedMotion }: { reducedMotion: boolean }) {
+function Connector({ reducedMotion, label }: { reducedMotion: boolean; label: string }) {
   return (
-    <div className="relative ml-4 h-6 w-px bg-os-accent/30">
+    <div className="relative ml-5 flex h-7 items-center">
+      <div className="h-full w-px bg-os-accent/35" />
       {!reducedMotion && <span className="arch-packet absolute left-[-3px] h-1.5 w-1.5 rounded-full bg-os-accent" />}
+      <span className="ml-3 font-mono text-[10px] text-os-muted/70">{label}</span>
     </div>
   );
 }

@@ -27,6 +27,7 @@ const HELP = [
   "files",
   "settings",
   "ls",
+  "uname",
   "clear",
 ];
 
@@ -189,6 +190,10 @@ export function runCommand(raw: string, developerMode: boolean): CommandResult {
     };
   }
 
+  if (normalized === "uname" || normalized === "uname -a") {
+    return { lines: ["ARYAN OS v2.0  kernel  desktop  webgl-optional"] };
+  }
+
   if (normalized === "ls") {
     return {
       lines: [
@@ -219,13 +224,13 @@ export function runCommand(raw: string, developerMode: boolean): CommandResult {
 
 function neofetch() {
   return [
-    "    /\\_/\\",
+        "    /\\_/\\",
     "   ( o.o )",
     "    > ^ <",
     "",
-    "Aryan",
+    "ARYAN OS",
     "",
-    "OS:         Aryan",
+    "OS:         ARYAN OS v2.0",
     "Role:       Full Stack Developer",
     "Focus:      Backend Engineering",
     "Runtime:    Node.js",

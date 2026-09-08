@@ -1,72 +1,90 @@
-import { useEffect } from "react";
-import { experience } from "@/data/experience";
-import { profile } from "@/data/profile";
-import { githubProfile } from "@/data/socials";
-import { WallpaperLayer } from "@/components/desktop/WallpaperLayer";
-import { useClock } from "@/hooks/useClock";
+import { useEffect, useState } from "react";
+import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import { useOsStore } from "@/store/osStore";
+
+const BOOT_LINES = [
+  "Initializing kernel............. OK",
+  "Loading developer profile....... OK",
+  "Loading experience.............. OK",
+  "Loading projects................ OK",
+  "Loading systems................. OK",
+  "Connecting to GitHub............ OK",
+];
 
 export function BootScreen() {
   const enterDesktop = useOsStore((s) => s.enterDesktop);
   const setRecruiterMode = useOsStore((s) => s.setRecruiterMode);
-  const { time, date } = useClock();
-  const current = experience.find((role) => role.current) ?? experience[0];
-  const blurb = profile.summary.split(". ")[0] + ".";
+  const reduced = usePrefersReducedMotion();
+  const [visible, setVisible] = useState(reduced ? BOOT_LINES.length : 0);
+  const complete = visible >= BOOT_LINES.length;
 
   useEffect(() => {
-    const onKey = (event: KeyboardEvent) => {
-      if (event.key === "Enter") enterDesktop();
+    if (reduced) {
+      const timer = window.setTimeout(enterDesktop, 450);
+      return () => window.clearTimeout(timer);
+    }
+
+    if (complete) {
+      const timer = window.setTimeout(enterDesktop, 380);
+      return () => window.clearTimeout(timer);
+    }
+
+    const timer = window.setTimeout(() => setVisible((count) => count + 1), 260);
+    return () => window.clearTimeout(timer);
+  }, [complete, enterDesktop, reduced, visible]);
+
+  useEffect(() => {
+    const skip = (event: KeyboardEvent) => {
+      if (event.key === "Enter" || event.key === "Escape" || event.key === " ") {
+        event.preventDefault();
+        enterDesktop();
+      }
     };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    window.addEventListener("keydown", skip);
+    return () => window.removeEventListener("keydown", skip);
   }, [enterDesktop]);
 
   return (
-    <section className="relative flex h-full min-h-dvh flex-col overflow-hidden text-os-text" aria-label="Welcome">
-      <WallpaperLayer dim />
+    <section
+      className="relative flex h-full min-h-dvh flex-col overflow-hidden bg-[#07090d] text-os-text"
+      aria-label="ARYAN OS boot"
+    >
+      <div className="pointer-events-none absolute inset-0 opacity-40" aria-hidden="true">
+        <div className="horizon-grid absolute -bottom-[40%] left-[-15%] h-[85%] w-[130%] opacity-35" />
+        <div className="noise absolute inset-0" />
+      </div>
 
-      <div className="relative z-10 flex min-h-dvh flex-1 flex-col justify-between px-6 py-6 sm:px-14 sm:py-10">
-        <header className="flex items-start justify-between gap-4 text-sm text-os-muted">
-          <span>{profile.location}</span>
-          <time dateTime={new Date().toISOString()} className="text-right tabular-nums">
-            <span className="block font-display text-2xl text-os-text sm:text-3xl">{time}</span>
-            <span className="text-xs">{date}</span>
-          </time>
-        </header>
-
-        <div className="max-w-xl">
-          <p className="text-sm text-os-accent">{profile.focus}</p>
-          <h1 className="mt-2 font-display text-6xl font-semibold tracking-tight sm:text-8xl">Aryan</h1>
-          <p className="mt-4 text-lg text-os-muted">{profile.title}</p>
-          <p className="mt-3 max-w-md text-sm leading-relaxed text-os-text/85">{blurb}</p>
-
-          <div className="mt-10 flex flex-wrap items-center gap-3">
-            <button
-              type="button"
-              onClick={enterDesktop}
-              className="rounded-full bg-os-accent px-7 py-3 text-sm font-medium text-white transition hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-os-accent"
-            >
-              Enter desktop
-            </button>
-            <button
-              type="button"
-              onClick={() => setRecruiterMode(true)}
-              className="rounded-full border border-white/15 px-7 py-3 text-sm text-os-muted transition hover:bg-white/8 hover:text-os-text focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-os-accent"
-            >
-              Recruiter Mode
-            </button>
-          </div>
+      <div className="relative z-10 flex min-h-dvh flex-1 flex-col justify-between px-6 py-8 sm:px-14 sm:py-10">
+        <div>
+          <p className="font-mono text-[11px] tracking-[0.28em] text-os-accent">KERNEL</p>
+          <h1 className="mt-2 font-display text-4xl font-semibold tracking-tight sm:text-5xl">ARYAN OS</h1>
+          <p className="mt-1 font-mono text-sm text-os-muted">v2.0</p>
         </div>
 
-        <footer className="flex flex-wrap gap-x-8 gap-y-2 text-xs text-os-muted">
-          <span>
-            {current.role} · {current.company}
-          </span>
-          <a href={githubProfile.url} target="_blank" rel="noreferrer" className="hover:text-os-text">
-            github.com/{githubProfile.username}
-          </a>
-          <span>Press Enter</span>
-        </footer>
+        <div className="max-w-xl font-mono text-[13px] leading-7 text-os-text/90 sm:text-sm">
+          {BOOT_LINES.slice(0, visible).map((line) => (
+            <p key={line}>{line}</p>
+          ))}
+          {complete && <p className="mt-4 text-os-accent">Starting desktop...</p>}
+        </div>
+
+        <div className="flex flex-wrap items-center gap-3">
+          <button
+            type="button"
+            onClick={enterDesktop}
+            className="rounded-md border border-white/12 px-4 py-2 font-mono text-xs text-os-muted transition hover:border-white/25 hover:text-os-text"
+          >
+            Skip
+          </button>
+          <button
+            type="button"
+            onClick={() => setRecruiterMode(true)}
+            className="rounded-md px-4 py-2 font-mono text-xs text-os-muted transition hover:text-os-text"
+          >
+            Recruiter Mode
+          </button>
+          <span className="font-mono text-[11px] text-os-muted/70">Enter to continue</span>
+        </div>
       </div>
     </section>
   );

@@ -1,5 +1,7 @@
+import { useEffect } from "react";
 import { projects } from "@/data/projects";
 import { githubProfile } from "@/data/socials";
+import { useOsStore } from "@/store/osStore";
 
 function languagePresence() {
   const counts = new Map<string, number>();
@@ -11,10 +13,19 @@ function languagePresence() {
   return [...counts.entries()].sort((a, b) => b[1] - a[1]);
 }
 
+let githubNotified = false;
+
 export default function GithubApp() {
   const languages = languagePresence();
   const featured = projects.filter((project) => project.featured);
   const max = languages[0]?.[1] ?? 1;
+  const pushNotification = useOsStore((s) => s.pushNotification);
+
+  useEffect(() => {
+    if (githubNotified) return;
+    githubNotified = true;
+    pushNotification("GitHub", "Repository index loaded.");
+  }, [pushNotification]);
 
   return (
     <div className="space-y-5 p-5 text-sm">
@@ -27,7 +38,7 @@ export default function GithubApp() {
           className="h-14 w-14 rounded-xl border border-white/10"
         />
         <div>
-          <p className="text-xs text-os-accent">GitHub</p>
+          <p className="font-mono text-[11px] tracking-[0.2em] text-os-muted">GITHUB</p>
           <h3 className="mt-1 font-display text-2xl font-medium">@{githubProfile.username}</h3>
           <p className="text-xs text-os-muted">{githubProfile.bio}</p>
         </div>
@@ -76,6 +87,17 @@ export default function GithubApp() {
               {project.description && (
                 <p className="mt-1 text-xs text-os-muted">{project.description}</p>
               )}
+              <p className="mt-2 text-[11px] text-os-muted">{project.technologies.join(" · ")}</p>
+              <div className="mt-2 flex gap-3 text-[12px]">
+                <a href={project.url} target="_blank" rel="noreferrer" className="text-os-accent hover:underline">
+                  GitHub
+                </a>
+                {project.demoUrl && (
+                  <a href={project.demoUrl} target="_blank" rel="noreferrer" className="text-os-accent hover:underline">
+                    Demo
+                  </a>
+                )}
+              </div>
             </li>
           ))}
         </ul>

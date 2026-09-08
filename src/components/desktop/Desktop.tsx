@@ -19,19 +19,11 @@ import { useOsStore } from "@/store/osStore";
 export function Desktop() {
   const closeChrome = useOsStore((s) => s.closeChrome);
   const openApp = useOsStore((s) => s.openApp);
+  const selectApp = useOsStore((s) => s.selectApp);
   const unlockDeveloperMode = useOsStore((s) => s.unlockDeveloperMode);
   const pushNotification = useOsStore((s) => s.pushNotification);
   const openContextMenu = useOsStore((s) => s.openContextMenu);
   const mobile = useIsMobile();
-
-  useEffect(() => {
-    if (mobile) return;
-    const timer = window.setTimeout(() => {
-      const store = useOsStore.getState();
-      if (store.windows.length === 0) store.openApp("about");
-    }, 280);
-    return () => window.clearTimeout(timer);
-  }, [mobile]);
 
   useKonami(() => {
     unlockDeveloperMode();
@@ -47,7 +39,7 @@ export function Desktop() {
       const mod = event.ctrlKey || event.metaKey;
       if (mod && (event.key === "k" || event.key === "K")) {
         event.preventDefault();
-        store.setSpotlight(!store.spotlightOpen);
+        store.toggleLauncher();
         return;
       }
       if (mod && event.code === "Space") {
@@ -66,8 +58,36 @@ export function Desktop() {
         store.openApp("terminal");
         return;
       }
+
+      const typing =
+        event.target instanceof HTMLElement &&
+        (event.target.tagName === "INPUT" ||
+          event.target.tagName === "TEXTAREA" ||
+          event.target.isContentEditable);
+      const hasWindow = store.windows.some((win) => !win.minimized);
+
+      if (!typing && !hasWindow && !store.spotlightOpen && !store.launcherOpen) {
+        const ids = desktopShortcuts.map((app) => app.id);
+        if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+          event.preventDefault();
+          const index = store.selectedAppId ? ids.indexOf(store.selectedAppId) : -1;
+          const next =
+            event.key === "ArrowDown"
+              ? Math.min(ids.length - 1, index + 1)
+              : Math.max(0, index <= 0 ? 0 : index - 1);
+          if (ids[next]) store.selectApp(ids[next]);
+          return;
+        }
+        if ((event.key === "Enter" || event.key === " ") && store.selectedAppId) {
+          event.preventDefault();
+          store.openApp(store.selectedAppId);
+          return;
+        }
+      }
+
       if (event.key === "Escape") {
         store.closeChrome();
+        store.selectApp(null);
       }
     };
 
@@ -90,7 +110,7 @@ export function Desktop() {
     <section
       id="os-main"
       className="relative flex h-full min-h-dvh flex-col overflow-hidden bg-os-void"
-      aria-label="Aryan desktop"
+      aria-label="ARYAN OS desktop"
       onContextMenu={(event) => {
         event.preventDefault();
         openContextMenu(
@@ -105,13 +125,19 @@ export function Desktop() {
 
       <div
         className="relative flex min-h-0 flex-1"
-        onMouseDown={() => closeChrome()}
+        onMouseDown={() => {
+          closeChrome();
+          selectApp(null);
+        }}
       >
         {mobile ? (
           <MobileLauncher />
         ) : (
-          <div className="relative z-10 flex w-auto flex-col gap-1 p-5">
-            <div className="grid grid-cols-1 gap-2">
+          <div
+            className="relative z-30 flex w-auto flex-col gap-1 p-4 pt-5"
+            onMouseDown={(event) => event.stopPropagation()}
+          >
+            <div className="grid grid-cols-1 gap-1">
               {desktopShortcuts.map((app) => (
                 <DesktopIcon key={app.id} app={app} />
               ))}

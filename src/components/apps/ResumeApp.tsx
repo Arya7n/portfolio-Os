@@ -26,14 +26,14 @@ export function ResumeApp() {
         <button
           type="button"
           onClick={downloadResume}
-          className="rounded-full border border-os-accent/40 bg-os-accent/10 px-3 py-1.5 text-xs"
+          className="rounded-full bg-os-accent px-3 py-1.5 text-xs font-medium text-white"
         >
-          Download resume
+          Download
         </button>
         <button
           type="button"
           onClick={() => setRecruiterMode(true)}
-          className="rounded-full border border-os-line px-3 py-1.5 text-xs text-os-muted hover:text-os-text"
+          className="rounded-full border border-white/12 px-3 py-1.5 text-xs text-os-muted hover:text-os-text"
         >
           Recruiter Mode
         </button>

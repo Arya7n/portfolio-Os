@@ -12,7 +12,7 @@ import {
 } from "@/lib/layout";
 import type { OsNotification, OsPhase, OsWindow, WindowOrigin } from "@/types/os";
 
-export type TrayId = "clock" | "notify" | "net" | null;
+export type TrayId = "clock" | "notify" | "net" | "system" | null;
 
 interface ContextMenuState {
   x: number;
@@ -89,6 +89,8 @@ interface OsStore {
   contextMenu: ContextMenuState | null;
   tray: TrayId;
   altTabOpen: boolean;
+  selectedAppId: AppId | null;
+  focusedProjectId: string | null;
   enterDesktop: () => void;
   unlockDeveloperMode: () => void;
   setRecruiterMode: (open: boolean) => void;
@@ -106,6 +108,8 @@ interface OsStore {
   setSpotlight: (open: boolean) => void;
   openContextMenu: (x: number, y: number) => void;
   setTray: (id: TrayId) => void;
+  selectApp: (id: AppId | null) => void;
+  setFocusedProjectId: (id: string | null) => void;
   setAltTab: (open: boolean) => void;
   cycleAltTab: () => void;
   confirmAltTab: () => void;
@@ -175,17 +179,13 @@ export const useOsStore = create<OsStore>((set, get) => ({
   contextMenu: null,
   tray: null,
   altTabOpen: false,
+  selectedAppId: null,
+  focusedProjectId: null,
 
   enterDesktop: () => {
     if (get().phase === "desktop") return;
     set({ phase: "desktop" });
-    get().pushNotification("Aryan", "Session started.");
-    window.setTimeout(() => {
-      if (!getDesktopBounds().mobile && get().windows.length === 0) {
-        get().openApp("about");
-      }
-      get().pushNotification("Hint", "Ctrl+K search · right-click the desktop.");
-    }, 200);
+    get().pushNotification("ARYAN OS", "Welcome to ARYAN OS.");
   },
 
   setRecruiterMode: (open) => set({ recruiterMode: open, launcherOpen: false, spotlightOpen: false }),
@@ -256,6 +256,8 @@ export const useOsStore = create<OsStore>((set, get) => ({
       launcherOpen: false,
       spotlightOpen: false,
     })),
+  selectApp: (id) => set({ selectedAppId: id, contextMenu: null }),
+  setFocusedProjectId: (id) => set({ focusedProjectId: id }),
   setAltTab: (open) => set({ altTabOpen: open }),
   cycleAltTab: () => {
     const visible = get().windows.filter((win) => !win.minimized);
@@ -312,6 +314,7 @@ export const useOsStore = create<OsStore>((set, get) => ({
       spotlightOpen: false,
       contextMenu: null,
       tray: null,
+      selectedAppId: appId,
     }));
   },
 

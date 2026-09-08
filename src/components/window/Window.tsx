@@ -1,9 +1,11 @@
 import { useRef, useState, type PointerEvent, type ReactNode } from "react";
+import { motion } from "framer-motion";
 import { AppIcon } from "@/components/icons/AppIcons";
 import { AppContent } from "@/components/apps/AppContent";
 import { TASKBAR_HEIGHT, TOPBAR_HEIGHT, WINDOW_MIN_HEIGHT, WINDOW_MIN_WIDTH } from "@/lib/layout";
 import { cn } from "@/lib/cn";
 import { useIsMobile } from "@/hooks/useMediaQuery";
+import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import { useOsStore } from "@/store/osStore";
 import type { OsWindow } from "@/types/os";
 
@@ -21,6 +23,7 @@ export function Window({ win }: WindowProps) {
   const moveWindow = useOsStore((s) => s.moveWindow);
   const resizeWindow = useOsStore((s) => s.resizeWindow);
   const snapWindow = useOsStore((s) => s.snapWindow);
+  const reduced = usePrefersReducedMotion();
   const dragRef = useRef<{ px: number; py: number; x: number; y: number } | null>(null);
   const snapRef = useRef<"left" | "right" | "max" | null>(null);
   const [snapEdge, setSnapEdge] = useState<"left" | "right" | "max" | null>(null);
@@ -83,19 +86,29 @@ export function Window({ win }: WindowProps) {
     if (hint === "max") toggleMaximize(win.id);
   };
 
+  const originX = win.width ? Math.min(100, Math.max(0, ((win.origin.x - win.x) / win.width) * 100)) : 50;
+  const originY = win.height ? Math.min(100, Math.max(0, ((win.origin.y - win.y) / win.height) * 100)) : 20;
+
   return (
-    <article
+    <motion.article
       role="dialog"
       aria-label={`${win.filename} window`}
       aria-labelledby={`${win.id}-title`}
-      onMouseDown={() => focusWindow(win.id)}
+      onMouseDown={(event) => {
+        event.stopPropagation();
+        focusWindow(win.id);
+      }}
       onContextMenu={(event) => event.stopPropagation()}
       className={cn(
         "absolute flex flex-col overflow-hidden rounded-[12px]",
         "pointer-events-auto glass-panel",
-        active ? "shadow-[0_24px_60px_rgba(0,0,0,0.45)]" : "opacity-90",
+        active ? "shadow-[0_24px_60px_rgba(0,0,0,0.45)]" : "opacity-[0.88]",
       )}
-      style={{ ...style, zIndex: win.zIndex }}
+      initial={reduced ? false : { opacity: 0, scale: 0.84 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={reduced ? undefined : { opacity: 0, scale: 0.9 }}
+      transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+      style={{ ...style, zIndex: win.zIndex, transformOrigin: `${originX}% ${originY}%` }}
     >
       {snapEdge && (
         <div
@@ -159,7 +172,7 @@ export function Window({ win }: WindowProps) {
           <ResizeHandle edge="sw" win={win} resizeWindow={resizeWindow} />
         </>
       )}
-    </article>
+    </motion.article>
   );
 }
 

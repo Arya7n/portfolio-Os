@@ -20,7 +20,7 @@ export function ExperienceApp() {
   return (
     <div className="grid min-h-full lg:grid-cols-[minmax(220px,280px)_1fr]">
       <nav className="border-b border-white/8 p-4 lg:border-b-0 lg:border-r" aria-label="Experience timeline">
-        <p className="text-xs text-os-accent">Experience</p>
+        <p className="font-mono text-[11px] tracking-[0.2em] text-os-muted">EXPERIENCE</p>
         <div className="mt-4 space-y-6">
           {grouped.map(([year, roles]) => (
             <div key={year}>
@@ -106,7 +106,7 @@ function ExperienceDetail({ role }: { role: ExperienceRole }) {
           {role.technologies.map((tech) => (
             <li
               key={tech}
-              className="border border-os-line bg-os-raised/40 px-2.5 py-1 text-xs"
+              className="rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-xs"
             >
               {tech}
             </li>

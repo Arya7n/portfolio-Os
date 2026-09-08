@@ -1,11 +1,11 @@
+import { useMemo, useState } from "react";
 import { AppIcon, OsMark } from "@/components/icons/AppIcons";
 import { desktopApps } from "@/data/apps";
 import type { AppId } from "@/data/apps";
-import { profile } from "@/data/profile";
 import { cn } from "@/lib/cn";
 import { useOsStore } from "@/store/osStore";
 
-const PINNED: AppId[] = ["files", "terminal", "projects", "settings"];
+const PINNED: AppId[] = ["terminal", "projects", "resume", "files"];
 
 export function Taskbar() {
   const windows = useOsStore((s) => s.windows);
@@ -19,21 +19,39 @@ export function Taskbar() {
   const minimizeWindow = useOsStore((s) => s.minimizeWindow);
   const setRecruiterMode = useOsStore((s) => s.setRecruiterMode);
   const lock = useOsStore((s) => s.lock);
-
+  const [query, setQuery] = useState("");
   const runningUnpinned = windows.filter((win) => !PINNED.includes(win.appId));
+  const filteredApps = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return desktopApps;
+    return desktopApps.filter(
+      (app) => app.filename.toLowerCase().includes(q) || app.title.toLowerCase().includes(q),
+    );
+  }, [query]);
 
   return (
     <div className="relative z-50 flex justify-center px-3 pb-3 pt-1">
       {launcherOpen && (
         <>
-          <button type="button" aria-label="Close app grid" className="fixed inset-0 z-40 cursor-default bg-black/35 backdrop-blur-sm" onClick={closeLauncher} />
+          <button type="button" aria-label="Close app grid" className="fixed inset-0 z-40 cursor-default bg-black/35 backdrop-blur-sm" onClick={() => { closeLauncher(); setQuery(""); }} />
           <div className="glass-panel absolute bottom-[calc(100%+12px)] left-1/2 z-50 w-[min(92vw,520px)] -translate-x-1/2 overflow-hidden rounded-2xl" role="menu" aria-label="Applications">
             <div className="border-b border-white/8 px-4 py-3">
-              <p className="text-sm font-semibold">{profile.name}</p>
-              <p className="text-xs text-os-muted">{profile.title}</p>
+              <p className="font-mono text-[11px] tracking-[0.18em] text-os-muted">APPLICATIONS</p>
+              <input
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                placeholder="Search"
+                className="mt-2 w-full rounded-lg border-0 bg-white/6 px-3 py-1.5 text-sm outline-none placeholder:text-os-muted"
+                onKeyDown={(event) => {
+                  if (event.key === "Enter" && filteredApps[0]) openApp(filteredApps[0].id);
+                }}
+              />
             </div>
             <div className="grid max-h-80 grid-cols-2 gap-1 overflow-auto p-2 sm:grid-cols-3">
-              {desktopApps.map((app) => (
+              {filteredApps.length === 0 && (
+                <p className="col-span-full px-2 py-6 text-center text-xs text-os-muted">No applications match.</p>
+              )}
+              {filteredApps.map((app) => (
                 <button
                   key={app.id}
                   type="button"
@@ -44,7 +62,7 @@ export function Taskbar() {
                   <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/8 text-os-accent">
                     <AppIcon id={app.id} className="h-4 w-4" />
                   </span>
-                  <span className="text-sm">{app.title}</span>
+                  <span className="text-sm">{app.filename}</span>
                 </button>
               ))}
             </div>

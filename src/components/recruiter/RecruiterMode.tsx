@@ -16,7 +16,7 @@ export function RecruiterMode() {
     <div id="recruiter" className="fixed inset-0 z-[100] overflow-auto bg-os-void text-os-text">
       <div className="mx-auto max-w-3xl px-5 py-8 sm:py-12">
         <div className="mb-8 flex flex-wrap items-center justify-between gap-3">
-          <p className="text-xs text-os-accent">Recruiter Mode</p>
+          <p className="font-mono text-[11px] tracking-[0.2em] text-os-muted">RECRUITER MODE</p>
           <div className="flex gap-2">
             <button
               type="button"
@@ -141,7 +141,7 @@ export function RecruiterMode() {
 function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
     <section className="border-b border-white/10 py-6">
-      <h2 className="mb-3 text-xs text-os-muted">{title}</h2>
+        <h2 className="mb-3 font-mono text-[11px] tracking-[0.18em] text-os-muted">{title}</h2>
       {children}
     </section>
   );

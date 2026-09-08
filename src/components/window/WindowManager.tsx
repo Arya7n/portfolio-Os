@@ -1,3 +1,4 @@
+import { AnimatePresence } from "framer-motion";
 import { Window } from "@/components/window/Window";
 import { useOsStore } from "@/store/osStore";
 
@@ -7,9 +8,11 @@ export function WindowManager() {
 
   return (
     <div className="pointer-events-none absolute inset-0 z-20">
-      {visible.map((win) => (
-        <Window key={win.id} win={win} />
-      ))}
+      <AnimatePresence>
+        {visible.map((win) => (
+          <Window key={win.id} win={win} />
+        ))}
+      </AnimatePresence>
     </div>
   );
 }
