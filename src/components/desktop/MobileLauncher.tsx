@@ -11,7 +11,7 @@ export function MobileLauncher() {
 
   return (
     <div className="relative z-10 flex min-h-0 flex-1 flex-col overflow-auto p-4 pb-8">
-      <p className="font-mono text-[11px] tracking-[0.2em] text-os-muted">ARYAN OS</p>
+      <p className="font-mono text-[11px] tracking-[0.2em] text-os-muted">ARYAN</p>
       <h2 className="mt-2 font-display text-2xl font-semibold">Applications</h2>
       <div className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2">
         {listedApps().map((app) => (

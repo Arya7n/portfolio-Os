@@ -34,7 +34,7 @@ export function TopBar() {
           onClick={() => setMenuOpen((open) => !open)}
         >
           <span className="h-1.5 w-1.5 rounded-full bg-os-accent" aria-hidden="true" />
-          ARYAN OS
+          ARYAN
         </button>
         {menuOpen && (
           <>

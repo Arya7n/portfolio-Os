@@ -110,7 +110,7 @@ export function Desktop() {
     <section
       id="os-main"
       className="relative flex h-full min-h-dvh flex-col overflow-hidden bg-os-void"
-      aria-label="ARYAN OS desktop"
+      aria-label="ARYAN desktop"
       onContextMenu={(event) => {
         event.preventDefault();
         openContextMenu(

@@ -110,7 +110,7 @@ export function runCommand(raw: string, ctx: CommandContext): CommandResult {
 
   if (cmd === "uname") {
     return {
-      lines: [args[0] === "-a" || args.join(" ") === "-a" ? "ARYAN OS v2.0  kernel  desktop  webgl-optional" : "ARYAN OS"],
+      lines: [args[0] === "-a" || args.join(" ") === "-a" ? "ARYAN v2.0  kernel  desktop  webgl-optional" : "ARYAN"],
     };
   }
 
@@ -397,9 +397,9 @@ function neofetch() {
     "   ( o.o )",
     "    > ^ <",
     "",
-    "ARYAN OS",
+    "ARYAN",
     "",
-    "OS:         ARYAN OS v2.0",
+    "OS:         ARYAN v2.0",
     "Role:       Full Stack Developer",
     "Focus:      Backend Engineering",
     "Runtime:    Node.js",

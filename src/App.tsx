@@ -13,7 +13,7 @@ export default function App() {
   return (
     <div className="os-root">
       <a href="#os-main" className="skip-link">
-        Skip to ARYAN OS
+        Skip to ARYAN
       </a>
       <button type="button" className="skip-link skip-link-resume" onClick={() => setRecruiterMode(true)}>
         Skip to resume

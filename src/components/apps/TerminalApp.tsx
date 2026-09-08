@@ -15,7 +15,7 @@ export default function TerminalApp() {
   const processes = useOsStore((s) =>
     s.windows.map((win) => ({ filename: win.filename, title: win.title, appId: win.appId })),
   );
-  const [lines, setLines] = useState<Line[]>([{ kind: "sys", text: "ARYAN OS v2.0 · type help" }]);
+  const [lines, setLines] = useState<Line[]>([{ kind: "sys", text: "ARYAN v2.0 · type help" }]);
   const [value, setValue] = useState("");
   const history = useRef<string[]>([]);
   const historyIndex = useRef(-1);

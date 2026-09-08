@@ -47,7 +47,7 @@ export function BootScreen() {
   return (
     <section
       className="relative flex h-full min-h-dvh flex-col overflow-hidden bg-[#07090d] text-os-text"
-      aria-label="ARYAN OS boot"
+      aria-label="ARYAN boot"
     >
       <div className="pointer-events-none absolute inset-0 opacity-30" aria-hidden="true">
         <div className="horizon-grid absolute -bottom-[40%] left-[-15%] h-[85%] w-[130%] opacity-25" />
@@ -57,7 +57,7 @@ export function BootScreen() {
       <div className="relative z-10 flex min-h-dvh flex-1 flex-col justify-between px-6 py-8 sm:px-14 sm:py-10">
         <div>
           <p className="font-mono text-[11px] tracking-[0.28em] text-os-accent">KERNEL</p>
-          <h1 className="mt-2 font-display text-4xl font-semibold tracking-tight sm:text-5xl">ARYAN OS</h1>
+          <h1 className="mt-2 font-display text-4xl font-semibold tracking-tight sm:text-5xl">ARYAN</h1>
           <p className="mt-1 font-mono text-sm text-os-muted">v2.0</p>
         </div>
 
