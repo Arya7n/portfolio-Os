@@ -56,7 +56,7 @@ export const skillNodes: SkillNode[] = [
     x: 8,
     y: 32,
     related: ["Next.js", "Redux", "Tailwind CSS", "TypeScript"],
-    usedIn: "UI layer for dashboards, production apps, and this OS.",
+    usedIn: "UI layer for dashboards, production apps, and this desktop.",
   },
   {
     id: "Next.js",

@@ -14,7 +14,7 @@ export function AltTab() {
 
   return (
     <div className="pointer-events-none absolute inset-0 z-[92] flex items-center justify-center">
-      <div className="glass-panel pointer-events-auto flex max-w-[90vw] gap-2 rounded-lg p-3" role="listbox" aria-label="Switch windows">
+      <div className="glass-panel pointer-events-auto flex max-w-[90vw] gap-2 rounded-2xl p-3" role="listbox" aria-label="Switch windows">
         {visible.map((win) => (
           <button
             key={win.id}
@@ -24,12 +24,12 @@ export function AltTab() {
               setAltTab(false);
             }}
             className={cn(
-              "flex w-28 flex-col items-center gap-2 rounded-md border px-2 py-3",
-              win.id === activeId ? "border-os-accent bg-os-accent/12" : "border-transparent hover:bg-white/5",
+              "flex w-28 flex-col items-center gap-2 rounded-xl px-2 py-3",
+              win.id === activeId ? "bg-white/12" : "hover:bg-white/6",
             )}
           >
-            <AppIcon id={win.appId} className="h-6 w-6 text-os-accent" />
-            <span className="truncate text-xs">{win.filename}</span>
+            <AppIcon id={win.appId} className="h-6 w-6 text-os-text" />
+            <span className="truncate text-xs">{win.title}</span>
           </button>
         ))}
       </div>

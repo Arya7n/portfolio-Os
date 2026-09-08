@@ -1,6 +1,6 @@
-# ARYAN OS
+# Aryan
 
-Interactive operating-system portfolio for Aryan — Full Stack Developer, backend-focused.
+Interactive developer workstation portfolio for Aryan — Full Stack Developer, backend-focused.
 
 ## Phase 1
 

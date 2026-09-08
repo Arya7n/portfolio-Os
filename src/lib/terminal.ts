@@ -3,7 +3,7 @@ import { experience } from "@/data/experience";
 import { profile } from "@/data/profile";
 import { projects } from "@/data/projects";
 import { skills } from "@/data/skills";
-import { githubProfile, socials } from "@/data/socials";
+import { contactEmail, githubProfile, socials } from "@/data/socials";
 
 export type CommandAction = { type: "open"; appId: AppId } | { type: "clear" } | { type: "scan" };
 
@@ -111,11 +111,10 @@ export function runCommand(raw: string, developerMode: boolean): CommandResult {
   if (normalized === "contact") {
     return {
       lines: [
-        "Public channel:",
-        githubProfile.url,
+        "Email:",
+        contactEmail,
         "",
-        "A public email is not published on GitHub.",
-        "Use contact.exe to prepare a transmission locally.",
+        githubProfile.url,
         ...socials.map((link) => `${link.label}: ${link.href}`),
       ],
       action: { type: "open", appId: "contact" },
@@ -176,7 +175,7 @@ export function runCommand(raw: string, developerMode: boolean): CommandResult {
   if (normalized === "diagnostics" || normalized === "sysinfo") {
     return {
       lines: [
-        "ARYAN OS diagnostics",
+        "Aryan diagnostics",
         "",
         "kernel          ok",
         "window manager  ok",
@@ -224,9 +223,9 @@ function neofetch() {
     "   ( o.o )",
     "    > ^ <",
     "",
-    "ARYAN OS",
+    "Aryan",
     "",
-    "OS:         AryanOS",
+    "OS:         Aryan",
     "Role:       Full Stack Developer",
     "Focus:      Backend Engineering",
     "Runtime:    Node.js",

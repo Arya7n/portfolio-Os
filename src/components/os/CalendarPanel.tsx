@@ -22,8 +22,8 @@ export function CalendarPanel() {
             key={i}
             className={
               day === today
-                ? "rounded bg-os-accent/20 text-os-accent"
-                : "text-os-text"
+                ? "inline-flex h-6 w-6 items-center justify-center justify-self-center rounded-full bg-os-accent text-white"
+                : "inline-flex h-6 w-6 items-center justify-center justify-self-center text-os-text"
             }
           >
             {day ?? ""}

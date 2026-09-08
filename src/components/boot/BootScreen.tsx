@@ -1,118 +1,73 @@
-import { useEffect, useMemo, useState } from "react";
-import { motion } from "framer-motion";
-import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
+import { useEffect } from "react";
+import { experience } from "@/data/experience";
+import { profile } from "@/data/profile";
+import { githubProfile } from "@/data/socials";
+import { WallpaperLayer } from "@/components/desktop/WallpaperLayer";
+import { useClock } from "@/hooks/useClock";
 import { useOsStore } from "@/store/osStore";
-import { OsMark } from "@/components/icons/AppIcons";
-
-const BOOT_LINES = [
-  { label: "Mounting /home/arya7n", result: "OK" as const },
-  { label: "Loading developer profile", result: "OK" as const },
-  { label: "Indexing experience", result: "OK" as const },
-  { label: "Indexing projects", result: "OK" as const },
-  { label: "Starting window manager", result: "OK" as const },
-  { label: "Loading coffee", result: "FAILED" as const },
-];
 
 export function BootScreen() {
   const enterDesktop = useOsStore((s) => s.enterDesktop);
   const setRecruiterMode = useOsStore((s) => s.setRecruiterMode);
-  const reducedMotion = usePrefersReducedMotion();
-  const [visibleCount, setVisibleCount] = useState(reducedMotion ? BOOT_LINES.length : 0);
-  const [stage, setStage] = useState<"logs" | "identity">(reducedMotion ? "identity" : "logs");
-
-  const logsDone = visibleCount >= BOOT_LINES.length;
-
-  useEffect(() => {
-    if (reducedMotion) return;
-    if (visibleCount >= BOOT_LINES.length) {
-      const timer = window.setTimeout(() => setStage("identity"), 700);
-      return () => window.clearTimeout(timer);
-    }
-    const timer = window.setTimeout(() => setVisibleCount((count) => count + 1), 320);
-    return () => window.clearTimeout(timer);
-  }, [visibleCount, reducedMotion]);
+  const { time, date } = useClock();
+  const current = experience.find((role) => role.current) ?? experience[0];
+  const blurb = profile.summary.split(". ")[0] + ".";
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
-      if (event.key === "Enter" && stage === "identity") {
-        enterDesktop();
-      }
-      if (event.key === "Escape" || event.key.toLowerCase() === "s") {
-        if (stage === "logs") {
-          setVisibleCount(BOOT_LINES.length);
-          setStage("identity");
-        }
-      }
+      if (event.key === "Enter") enterDesktop();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [enterDesktop, stage]);
-
-  const year = useMemo(() => new Date().getFullYear(), []);
+  }, [enterDesktop]);
 
   return (
-    <motion.section
-      className="wall-forge relative flex h-full min-h-dvh flex-col overflow-hidden text-os-text"
-      aria-label="Aryan OS boot sequence"
-    >
-      <div className="pointer-events-none absolute inset-0">
-        <div className="noise absolute inset-0" />
-        <div className="scanlines absolute inset-0" />
-      </div>
+    <section className="relative flex h-full min-h-dvh flex-col overflow-hidden text-os-text" aria-label="Welcome">
+      <WallpaperLayer dim />
 
-      <header className="relative z-10 flex items-center justify-between px-5 py-4 font-mono text-[11px] text-os-muted">
-        <span>Aryan OS v1.0</span>
-        <span>workstation</span>
-      </header>
+      <div className="relative z-10 flex min-h-dvh flex-1 flex-col justify-between px-6 py-6 sm:px-14 sm:py-10">
+        <header className="flex items-start justify-between gap-4 text-sm text-os-muted">
+          <span>{profile.location}</span>
+          <time dateTime={new Date().toISOString()} className="text-right tabular-nums">
+            <span className="block font-display text-2xl text-os-text sm:text-3xl">{time}</span>
+            <span className="text-xs">{date}</span>
+          </time>
+        </header>
 
-      <div className="relative z-10 mx-auto flex w-full max-w-3xl flex-1 flex-col justify-center px-6 py-8">
-        {stage === "logs" ? (
-          <div className="font-mono text-[13px] leading-7 sm:text-sm">
-            <p className="mb-6 text-os-accent">boot — aryan os</p>
-            {BOOT_LINES.slice(0, visibleCount).map((line) => (
-              <p key={line.label} className="flex flex-wrap gap-x-3">
-                <span className="text-os-muted">{line.label}</span>
-                <span className="hidden text-os-muted/50 sm:inline">
-                  {".".repeat(Math.max(4, 32 - line.label.length))}
-                </span>
-                <span className={line.result === "OK" ? "text-os-ok" : "text-os-fail"}>{line.result}</span>
-              </p>
-            ))}
-            {logsDone && <p className="mt-6 text-os-text boot-caret">Starting desktop…</p>}
+        <div className="max-w-xl">
+          <p className="text-sm text-os-accent">{profile.focus}</p>
+          <h1 className="mt-2 font-display text-6xl font-semibold tracking-tight sm:text-8xl">Aryan</h1>
+          <p className="mt-4 text-lg text-os-muted">{profile.title}</p>
+          <p className="mt-3 max-w-md text-sm leading-relaxed text-os-text/85">{blurb}</p>
+
+          <div className="mt-10 flex flex-wrap items-center gap-3">
+            <button
+              type="button"
+              onClick={enterDesktop}
+              className="rounded-full bg-os-accent px-7 py-3 text-sm font-medium text-white transition hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-os-accent"
+            >
+              Enter desktop
+            </button>
+            <button
+              type="button"
+              onClick={() => setRecruiterMode(true)}
+              className="rounded-full border border-white/15 px-7 py-3 text-sm text-os-muted transition hover:bg-white/8 hover:text-os-text focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-os-accent"
+            >
+              Recruiter Mode
+            </button>
           </div>
-        ) : (
-          <motion.div initial={reducedMotion ? false : { y: 12 }} animate={{ y: 0 }} className="text-center">
-            <div className="mx-auto mb-8 flex h-16 w-16 items-center justify-center border border-os-line bg-os-panel text-os-accent">
-              <OsMark className="h-10 w-10" />
-            </div>
-            <p className="font-mono text-xs text-os-accent">session ready</p>
-            <h1 className="mt-3 font-display text-5xl font-medium sm:text-7xl">Aryan OS</h1>
-            <p className="mt-4 text-base text-os-muted">Full stack developer · backend-focused</p>
+        </div>
 
-            <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <button
-                type="button"
-                onClick={enterDesktop}
-                className="min-w-48 border border-os-accent bg-os-accent/15 px-8 py-3 text-sm font-medium text-os-text transition hover:bg-os-accent/25 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-os-accent"
-              >
-                Enter desktop
-              </button>
-              <button
-                type="button"
-                onClick={() => setRecruiterMode(true)}
-                className="min-w-48 border border-os-line px-8 py-3 text-sm text-os-muted transition hover:border-os-accent hover:text-os-text focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-os-accent"
-              >
-                Recruiter Mode
-              </button>
-            </div>
-            <p className="mt-6 font-mono text-[11px] text-os-muted">Enter continues · Esc skips boot</p>
-          </motion.div>
-        )}
+        <footer className="flex flex-wrap gap-x-8 gap-y-2 text-xs text-os-muted">
+          <span>
+            {current.role} · {current.company}
+          </span>
+          <a href={githubProfile.url} target="_blank" rel="noreferrer" className="hover:text-os-text">
+            github.com/{githubProfile.username}
+          </a>
+          <span>Press Enter</span>
+        </footer>
       </div>
-
-      <footer className="relative z-10 px-5 py-4 text-center font-mono text-[10px] text-os-muted">
-        © {year} Aryan
-      </footer>
-    </motion.section>
+    </section>
   );
 }

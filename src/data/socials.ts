@@ -12,7 +12,15 @@ export const socials: SocialLink[] = [
     href: "https://github.com/Arya7n",
     external: true,
   },
+  {
+    id: "email",
+    label: "Email",
+    href: "mailto:aryan11jr@gmail.com",
+    external: true,
+  },
 ];
+
+export const contactEmail = "aryan11jr@gmail.com";
 
 export const githubProfile = {
   username: "Arya7n",

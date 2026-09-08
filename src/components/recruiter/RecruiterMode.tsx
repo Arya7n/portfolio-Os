@@ -21,14 +21,14 @@ export function RecruiterMode() {
             <button
               type="button"
               onClick={downloadResume}
-              className="border border-os-line px-3 py-1.5 text-xs"
+              className="rounded-full border border-os-line px-3 py-1.5 text-xs"
             >
               Download resume
             </button>
             <button
               type="button"
               onClick={() => window.print()}
-              className="border border-os-line px-3 py-1.5 text-xs"
+              className="rounded-full border border-os-line px-3 py-1.5 text-xs"
             >
               Print / Save PDF
             </button>
@@ -38,14 +38,14 @@ export function RecruiterMode() {
                 setRecruiterMode(false);
                 if (phase !== "desktop") enterDesktop();
               }}
-              className="border border-os-accent/40 px-3 py-1.5 text-xs"
+              className="rounded-full bg-os-accent px-3 py-1.5 text-xs font-medium text-white"
             >
               Enter desktop
             </button>
             <button
               type="button"
               onClick={() => setRecruiterMode(false)}
-              className="border border-os-line px-3 py-1.5 text-xs text-os-muted"
+              className="rounded-full border border-os-line px-3 py-1.5 text-xs text-os-muted"
             >
               Close
             </button>

@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
 import { MobileLauncher } from "@/components/desktop/MobileLauncher";
+import { WallpaperLayer } from "@/components/desktop/WallpaperLayer";
 import { SceneBackdrop } from "@/components/scene/SceneBackdrop";
 import { DesktopIcon } from "@/components/desktop/DesktopIcon";
 import { Taskbar } from "@/components/desktop/Taskbar";
@@ -11,7 +12,6 @@ import { AltTab } from "@/components/os/AltTab";
 import { ContextMenu } from "@/components/os/ContextMenu";
 import { Spotlight } from "@/components/os/Spotlight";
 import { desktopShortcuts } from "@/data/apps";
-import { cn } from "@/lib/cn";
 import { useIsMobile } from "@/hooks/useMediaQuery";
 import { useKonami } from "@/hooks/useKonami";
 import { useOsStore } from "@/store/osStore";
@@ -21,7 +21,6 @@ export function Desktop() {
   const openApp = useOsStore((s) => s.openApp);
   const unlockDeveloperMode = useOsStore((s) => s.unlockDeveloperMode);
   const pushNotification = useOsStore((s) => s.pushNotification);
-  const wallpaper = useOsStore((s) => s.wallpaper);
   const openContextMenu = useOsStore((s) => s.openContextMenu);
   const mobile = useIsMobile();
 
@@ -90,8 +89,8 @@ export function Desktop() {
   return (
     <section
       id="os-main"
-      className={cn("relative flex h-full min-h-dvh flex-col overflow-hidden", `wall-${wallpaper}`)}
-      aria-label="Aryan OS desktop"
+      className="relative flex h-full min-h-dvh flex-col overflow-hidden bg-os-void"
+      aria-label="Aryan desktop"
       onContextMenu={(event) => {
         event.preventDefault();
         openContextMenu(
@@ -100,6 +99,7 @@ export function Desktop() {
         );
       }}
     >
+      <WallpaperLayer />
       <SceneBackdrop />
       <TopBar />
 

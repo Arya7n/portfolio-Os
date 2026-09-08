@@ -27,7 +27,7 @@ function Particles({ count }: { count: number }) {
       </bufferGeometry>
       <pointsMaterial
         size={0.028}
-        color="#e0a04a"
+        color="#8ec8ff"
         transparent
         opacity={0.45}
         sizeAttenuation
@@ -50,15 +50,15 @@ function Drift({ reduced }: { reduced: boolean }) {
     <group ref={reduced ? undefined : group}>
       <mesh position={[2.2, 0.8, -1.6]}>
         <icosahedronGeometry args={[0.38, 0]} />
-        <meshStandardMaterial color="#e0a04a" wireframe transparent opacity={0.32} />
+        <meshStandardMaterial color="#0a84ff" wireframe transparent opacity={0.32} />
       </mesh>
       <mesh position={[-2.4, 0.3, -2.2]}>
         <octahedronGeometry args={[0.28, 0]} />
-        <meshStandardMaterial color="#8fad73" wireframe transparent opacity={0.22} />
+        <meshStandardMaterial color="#30d158" wireframe transparent opacity={0.22} />
       </mesh>
       <mesh position={[0.4, -0.2, -3]}>
         <tetrahedronGeometry args={[0.22, 0]} />
-        <meshStandardMaterial color="#c4a574" wireframe transparent opacity={0.2} />
+        <meshStandardMaterial color="#98989d" wireframe transparent opacity={0.2} />
       </mesh>
     </group>
   );
@@ -93,13 +93,13 @@ export default function OsScene() {
         camera={{ position: [0, 1.2, 8.5], fov: 42, near: 0.1, far: 40 }}
         frameloop={reduced ? "demand" : "always"}
         onCreated={({ gl }) => {
-          gl.setClearColor("#14130f", 0);
+          gl.setClearColor("#1c1c1e", 0);
         }}
       >
-        <fog attach="fog" args={["#14130f", 8, 18]} />
-        <ambientLight intensity={0.35} />
-        <directionalLight position={[3, 4, 2]} intensity={0.55} color="#e8d5b0" />
-        <gridHelper args={[22, 28, "#3d3a32", "#1e1c18"]} position={[0, -1.55, 0]} />
+        <fog attach="fog" args={["#1c1c1e", 8, 18]} />
+        <ambientLight intensity={0.4} />
+        <directionalLight position={[3, 4, 2]} intensity={0.55} color="#f5f5f7" />
+        <gridHelper args={[22, 28, "#3a3a3c", "#2c2c2e"]} position={[0, -1.55, 0]} />
         <Particles count={reduced ? 24 : 70} />
         <Drift reduced={reduced} />
         <CameraRig reduced={reduced} />

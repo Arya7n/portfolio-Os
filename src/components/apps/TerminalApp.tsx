@@ -12,7 +12,7 @@ export default function TerminalApp() {
   const openApp = useOsStore((s) => s.openApp);
   const developerMode = useOsStore((s) => s.developerMode);
   const [lines, setLines] = useState<Line[]>([
-    { kind: "sys", text: "ARYAN OS terminal · type help" },
+    { kind: "sys", text: "Aryan · type help" },
   ]);
   const [value, setValue] = useState("");
   const [busy, setBusy] = useState(false);

@@ -46,7 +46,7 @@ export function FilesApp() {
       <div className="flex items-center gap-2 border-b border-os-line px-3 py-2">
         <button
           type="button"
-          className="border border-os-line px-2 py-1 text-xs text-os-muted hover:text-os-text disabled:opacity-40"
+          className="rounded-lg border border-os-line px-2 py-1 text-xs text-os-muted hover:text-os-text disabled:opacity-40"
           disabled={!folder}
           onClick={() => setFolder(null)}
         >
@@ -59,7 +59,7 @@ export function FilesApp() {
           <li key={entry.id}>
             <button
               type="button"
-              className="flex w-full items-center gap-2 border border-transparent px-2 py-2 text-left hover:border-os-line hover:bg-os-raised"
+              className="flex w-full items-center gap-2 rounded-xl border border-transparent px-2 py-2 text-left hover:bg-white/8"
               onDoubleClick={() => {
                 if (entry.kind === "folder") setFolder(entry.id);
                 else openApp(entry.appId);

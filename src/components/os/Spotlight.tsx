@@ -59,14 +59,14 @@ export function Spotlight() {
 
   return (
     <div className="absolute inset-0 z-[90] flex items-start justify-center pt-[12vh]">
-      <button type="button" className="absolute inset-0 bg-black/45" aria-label="Close search" onClick={() => setSpotlight(false)} />
-      <div className="glass-panel relative w-[min(92vw,520px)] overflow-hidden rounded-lg" role="dialog" aria-label="Search" onContextMenu={(event) => event.stopPropagation()}>
+      <button type="button" className="absolute inset-0 bg-black/40 backdrop-blur-sm" aria-label="Close search" onClick={() => setSpotlight(false)} />
+      <div className="glass-panel relative w-[min(92vw,560px)] overflow-hidden rounded-2xl" role="dialog" aria-label="Search" onContextMenu={(event) => event.stopPropagation()}>
         <input
           ref={inputRef}
           value={query}
           onChange={(event) => setQuery(event.target.value)}
           placeholder="Search apps, projects, experience…"
-          className="w-full border-b border-os-line bg-transparent px-4 py-3 outline-none"
+          className="w-full border-b border-white/8 bg-transparent px-5 py-4 text-[15px] outline-none"
           onKeyDown={(event) => {
             if (event.key === "Escape") setSpotlight(false);
             if (event.key === "Enter" && results[0]) {
@@ -84,7 +84,7 @@ export function Spotlight() {
             <li key={item.id}>
               <button
                 type="button"
-                className="flex w-full items-center gap-3 px-4 py-2 text-left hover:bg-white/5"
+                className="flex w-full items-center gap-3 px-4 py-2.5 text-left hover:bg-white/8"
                 onClick={() => {
                   if (item.kind === "app") openApp(item.id as AppId);
                   if (item.kind === "project") openApp("projects");

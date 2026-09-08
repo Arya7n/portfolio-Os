@@ -1,19 +1,19 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Atkinson Hyperlegible", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Fraunces", "Times New Roman", serif;
+  --font-sans: "Inter", "SF Pro Text", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Inter", "SF Pro Display", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, monospace;
-  --color-os-void: #14130f;
-  --color-os-panel: #1e1c18;
-  --color-os-raised: #2a271f;
-  --color-os-line: #3d3a32;
-  --color-os-text: #f3efe4;
-  --color-os-muted: #9d9788;
-  --color-os-accent: #e0a04a;
-  --color-os-ok: #8fad73;
-  --color-os-warn: #e0a04a;
-  --color-os-fail: #c46b5a;
+  --color-os-void: #1c1c1e;
+  --color-os-panel: #2c2c2e;
+  --color-os-raised: #3a3a3c;
+  --color-os-line: #48484a;
+  --color-os-text: #f5f5f7;
+  --color-os-muted: #98989d;
+  --color-os-accent: #0a84ff;
+  --color-os-ok: #30d158;
+  --color-os-warn: #ffd60a;
+  --color-os-fail: #ff453a;
 }
 
 html,
@@ -25,8 +25,8 @@ body,
 
 body {
   margin: 0;
-  background: #14130f;
-  color: #f3efe4;
+  background: #1c1c1e;
+  color: #f5f5f7;
   font-family: var(--font-sans);
   overflow: hidden;
   -webkit-font-smoothing: antialiased;
@@ -43,109 +43,77 @@ textarea {
 }
 
 ::selection {
-  background: rgba(224, 160, 74, 0.35);
-  color: #f3efe4;
+  background: rgba(10, 132, 255, 0.35);
+  color: #f5f5f7;
 }
 
 .os-root {
   height: 100%;
   min-height: 100dvh;
-  background: #14130f;
+  background: #1c1c1e;
 }
 
 .glass-panel {
-  background: #1e1c18;
-  border: 1px solid #3d3a32;
-  box-shadow: 0 22px 50px rgba(0, 0, 0, 0.42);
+  background: rgba(44, 44, 46, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow:
+    0 18px 50px rgba(0, 0, 0, 0.38),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(28px) saturate(1.5);
+  -webkit-backdrop-filter: blur(28px) saturate(1.5);
 }
 
-.wall-forge {
+.wall-harbor {
   background:
-    radial-gradient(ellipse at 18% 0%, rgba(92, 68, 28, 0.45), transparent 42%),
-    radial-gradient(ellipse at 88% 100%, rgba(40, 48, 32, 0.35), transparent 38%),
-    #14130f;
+    radial-gradient(ellipse at 18% 0%, rgba(10, 132, 255, 0.42), transparent 48%),
+    radial-gradient(ellipse at 88% 100%, rgba(88, 86, 214, 0.32), transparent 42%),
+    linear-gradient(180deg, #0d1b2e 0%, #1c1c1e 100%);
 }
 
-.wall-dune {
+.wall-ember {
   background:
-    radial-gradient(ellipse at 70% 10%, rgba(120, 72, 28, 0.38), transparent 40%),
-    linear-gradient(180deg, #1a1610 0%, #241c14 100%);
+    radial-gradient(ellipse at 78% 8%, rgba(192, 97, 203, 0.3), transparent 44%),
+    radial-gradient(ellipse at 12% 92%, rgba(53, 132, 228, 0.22), transparent 40%),
+    #1e1e2e;
 }
 
-.wall-ink {
-  background: #10100e;
-}
-
-.wall-studio {
+.wall-slate {
   background:
-    radial-gradient(ellipse at 50% 120%, rgba(48, 64, 44, 0.4), transparent 46%),
-    #13140f;
+    radial-gradient(ellipse at 50% 0%, rgba(255, 255, 255, 0.06), transparent 52%),
+    #241f31;
+}
+
+.wall-noir {
+  background: #000000;
 }
 
 .horizon-grid {
   background-image:
-    linear-gradient(rgba(224, 160, 74, 0.08) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(224, 160, 74, 0.08) 1px, transparent 1px);
+    linear-gradient(rgba(10, 132, 255, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(10, 132, 255, 0.07) 1px, transparent 1px);
   background-size: 48px 48px;
   transform: perspective(900px) rotateX(58deg) scale(1.35);
   transform-origin: center top;
   mask-image: linear-gradient(to bottom, transparent 0%, black 18%, black 55%, transparent 100%);
 }
 
-.scanlines {
-  background: repeating-linear-gradient(
-    to bottom,
-    transparent 0px,
-    transparent 2px,
-    rgba(0, 0, 0, 0.08) 3px
-  );
-  pointer-events: none;
-}
-
 .noise {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
-  opacity: 0.045;
+  opacity: 0.035;
   pointer-events: none;
-}
-
-@keyframes float-slow {
-  0%,
-  100% {
-    transform: translate3d(0, 0, 0);
-  }
-  50% {
-    transform: translate3d(12px, -18px, 0);
-  }
-}
-
-@keyframes boot-caret {
-  0%,
-  49% {
-    opacity: 1;
-  }
-  50%,
-  100% {
-    opacity: 0;
-  }
-}
-
-.boot-caret::after {
-  content: "█";
-  margin-left: 4px;
-  animation: boot-caret 1s steps(1) infinite;
 }
 
 .field-input {
   width: 100%;
-  border-radius: 4px;
-  border: 1px solid #3d3a32;
-  background: #16140f;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(28, 28, 30, 0.85);
   padding: 0.55rem 0.75rem;
   color: inherit;
 }
 
 .field-input:focus-visible {
-  outline: 2px solid #e0a04a;
+  outline: 2px solid #0a84ff;
   outline-offset: 2px;
 }
 
@@ -154,11 +122,11 @@ textarea {
   left: 0.75rem;
   top: -3rem;
   z-index: 200;
-  border-radius: 4px;
-  border: 1px solid #3d3a32;
-  background: #1e1c18;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #2c2c2e;
   padding: 0.4rem 0.8rem;
-  color: #f3efe4;
+  color: #f5f5f7;
   font-size: 0.75rem;
 }
 
@@ -215,5 +183,9 @@ textarea {
     transform: none;
     mask-image: none;
     opacity: 0.25;
+  }
+
+  .glass-panel {
+    backdrop-filter: none;
   }
 }

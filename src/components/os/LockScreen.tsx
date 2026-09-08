@@ -1,3 +1,4 @@
+import { WallpaperLayer } from "@/components/desktop/WallpaperLayer";
 import { profile } from "@/data/profile";
 import { useOsStore } from "@/store/osStore";
 import { useClock } from "@/hooks/useClock";
@@ -23,21 +24,21 @@ export function LockScreen() {
   if (!locked) return null;
 
   return (
-    <div className="fixed inset-0 z-[120] flex flex-col items-center justify-center bg-[#14130f] text-os-text">
-      <div className="noise absolute inset-0" />
-      <p className="relative font-display text-6xl font-medium tabular-nums">{time}</p>
+    <div className="fixed inset-0 z-[120] flex flex-col items-center justify-center text-os-text">
+      <WallpaperLayer dim />
+      <p className="relative font-display text-7xl font-semibold tabular-nums tracking-tight">{time}</p>
       <p className="relative mt-2 text-os-muted">{date}</p>
-      <p className="relative mt-8 font-display text-2xl">{profile.name}</p>
+      <p className="relative mt-10 font-display text-2xl font-medium">{profile.name}</p>
       <p className="relative text-sm text-os-muted">{profile.title}</p>
       <button
         type="button"
         autoFocus
         onClick={unlock}
-        className="relative mt-8 border border-os-line px-6 py-2 text-sm hover:border-os-accent"
+        className="relative mt-8 rounded-full bg-white/12 px-8 py-2.5 text-sm hover:bg-white/18"
       >
         Unlock
       </button>
-      <p className="relative mt-3 font-mono text-[11px] text-os-muted">Enter or click to resume session</p>
+      <p className="relative mt-3 text-[11px] text-os-muted">Enter or click to resume session</p>
     </div>
   );
 }

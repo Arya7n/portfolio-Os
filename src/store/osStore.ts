@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { desktopApps, getApp, type AppId } from "@/data/apps";
-import type { WallpaperId } from "@/data/wallpapers";
+import type { CustomWallpaper, WallpaperId } from "@/data/wallpapers";
+import { normalizeWallpaperId } from "@/data/wallpapers";
 import {
   TASKBAR_HEIGHT,
   TOPBAR_HEIGHT,
@@ -21,21 +22,43 @@ interface ContextMenuState {
 interface OsPrefs {
   wallpaper: WallpaperId;
   show3d: boolean;
+  customId: string | null;
+}
+
+const WALL_LIBRARY_KEY = "aryan-os-walls";
+
+function loadLibrary(): CustomWallpaper[] {
+  try {
+    const raw = localStorage.getItem(WALL_LIBRARY_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw) as CustomWallpaper[];
+    if (!Array.isArray(parsed)) return [];
+    return parsed.filter((item) => item?.id && item?.dataUrl).slice(0, 6);
+  } catch {
+    return [];
+  }
+}
+
+function saveLibrary(items: CustomWallpaper[]) {
+  try {
+    localStorage.setItem(WALL_LIBRARY_KEY, JSON.stringify(items));
+  } catch {
+    throw new Error("Storage is full. Remove a wallpaper and try again.");
+  }
 }
 
 function loadPrefs(): OsPrefs {
   try {
     const raw = localStorage.getItem("aryan-os-prefs");
-    if (!raw) return { wallpaper: "forge", show3d: true };
-    const parsed = JSON.parse(raw) as Partial<OsPrefs>;
-    const wallpaper = parsed.wallpaper ?? "forge";
-    const allowed: WallpaperId[] = ["forge", "dune", "ink", "studio"];
+    if (!raw) return { wallpaper: "harbor", show3d: true, customId: null };
+    const parsed = JSON.parse(raw) as Partial<OsPrefs> & { wallpaper?: string };
     return {
-      wallpaper: allowed.includes(wallpaper) ? wallpaper : "forge",
+      wallpaper: normalizeWallpaperId(parsed.wallpaper),
       show3d: parsed.show3d !== false,
+      customId: parsed.customId ?? null,
     };
   } catch {
-    return { wallpaper: "forge", show3d: true };
+    return { wallpaper: "harbor", show3d: true, customId: null };
   }
 }
 
@@ -58,6 +81,8 @@ interface OsStore {
   launcherOpen: boolean;
   developerMode: boolean;
   wallpaper: WallpaperId;
+  customId: string | null;
+  customWallpapers: CustomWallpaper[];
   show3d: boolean;
   locked: boolean;
   spotlightOpen: boolean;
@@ -72,6 +97,9 @@ interface OsStore {
   closeLauncher: () => void;
   closeChrome: () => void;
   setWallpaper: (id: WallpaperId) => void;
+  setCustomWallpaper: (id: string) => void;
+  addCustomWallpaper: (item: CustomWallpaper) => void;
+  removeCustomWallpaper: (id: string) => void;
   setShow3d: (on: boolean) => void;
   lock: () => void;
   unlock: () => void;
@@ -126,6 +154,7 @@ function defaultSize(appId: AppId) {
 }
 
 const prefs = loadPrefs();
+const library = loadLibrary();
 
 export const useOsStore = create<OsStore>((set, get) => ({
   phase: "boot",
@@ -137,7 +166,9 @@ export const useOsStore = create<OsStore>((set, get) => ({
   notificationLog: [],
   launcherOpen: false,
   developerMode: false,
-  wallpaper: prefs.wallpaper,
+  wallpaper: prefs.wallpaper === "custom" && library.length === 0 ? "harbor" : prefs.wallpaper,
+  customId: prefs.customId ?? library[0]?.id ?? null,
+  customWallpapers: library,
   show3d: prefs.show3d,
   locked: false,
   spotlightOpen: false,
@@ -148,7 +179,7 @@ export const useOsStore = create<OsStore>((set, get) => ({
   enterDesktop: () => {
     if (get().phase === "desktop") return;
     set({ phase: "desktop" });
-    get().pushNotification("Aryan OS", "Session started.");
+    get().pushNotification("Aryan", "Session started.");
     window.setTimeout(() => {
       if (!getDesktopBounds().mobile && get().windows.length === 0) {
         get().openApp("about");
@@ -180,11 +211,39 @@ export const useOsStore = create<OsStore>((set, get) => ({
 
   setWallpaper: (id) => {
     set({ wallpaper: id });
-    savePrefs({ wallpaper: id, show3d: get().show3d });
+    savePrefs({ wallpaper: id, show3d: get().show3d, customId: get().customId });
+  },
+  setCustomWallpaper: (id) => {
+    set({ wallpaper: "custom", customId: id });
+    savePrefs({ wallpaper: "custom", show3d: get().show3d, customId: id });
+  },
+  addCustomWallpaper: (item) => {
+    const next = [item, ...get().customWallpapers.filter((wall) => wall.id !== item.id)].slice(0, 6);
+    try {
+      saveLibrary(next);
+    } catch (caught) {
+      get().pushNotification("Display", caught instanceof Error ? caught.message : "Storage is full.");
+      return;
+    }
+    set({ customWallpapers: next, wallpaper: "custom", customId: item.id });
+    savePrefs({ wallpaper: "custom", show3d: get().show3d, customId: item.id });
+  },
+  removeCustomWallpaper: (id) => {
+    const next = get().customWallpapers.filter((wall) => wall.id !== id);
+    saveLibrary(next);
+    const stillCustom = get().wallpaper === "custom";
+    const nextId = next[0]?.id ?? null;
+    const wallpaper = stillCustom && nextId ? "custom" : stillCustom ? "harbor" : get().wallpaper;
+    set({
+      customWallpapers: next,
+      customId: stillCustom ? nextId : get().customId,
+      wallpaper,
+    });
+    savePrefs({ wallpaper, show3d: get().show3d, customId: stillCustom ? nextId : get().customId });
   },
   setShow3d: (on) => {
     set({ show3d: on });
-    savePrefs({ wallpaper: get().wallpaper, show3d: on });
+    savePrefs({ wallpaper: get().wallpaper, show3d: on, customId: get().customId });
   },
   lock: () => set({ locked: true, launcherOpen: false, spotlightOpen: false, tray: null }),
   unlock: () => set({ locked: false }),

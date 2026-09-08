@@ -1,4 +1,4 @@
-import { useRef, useState, type PointerEvent, type ReactNode } from "react";
+import { useRef, useState, type PointerEvent } from "react";
 import { AppIcon } from "@/components/icons/AppIcons";
 import { AppContent } from "@/components/apps/AppContent";
 import { TASKBAR_HEIGHT, TOPBAR_HEIGHT, WINDOW_MIN_HEIGHT, WINDOW_MIN_WIDTH } from "@/lib/layout";
@@ -91,15 +91,15 @@ export function Window({ win }: WindowProps) {
       onMouseDown={() => focusWindow(win.id)}
       onContextMenu={(event) => event.stopPropagation()}
       className={cn(
-        "absolute flex flex-col overflow-hidden rounded",
+        "absolute flex flex-col overflow-hidden rounded-[12px]",
         "pointer-events-auto glass-panel",
-        active ? "border-os-accent/55" : "opacity-95",
+        active ? "shadow-[0_24px_60px_rgba(0,0,0,0.45)]" : "opacity-90",
       )}
       style={{ ...style, zIndex: win.zIndex }}
     >
       {snapEdge && (
         <div
-          className="pointer-events-none fixed border border-os-accent/50 bg-os-accent/10"
+          className="pointer-events-none fixed rounded-[12px] border border-os-accent/50 bg-os-accent/10"
           style={
             snapEdge === "max"
               ? { left: 8, top: TOPBAR_HEIGHT + 8, width: "calc(100vw - 16px)", height: `calc(100dvh - ${TOPBAR_HEIGHT + TASKBAR_HEIGHT + 16}px)` }
@@ -110,30 +110,33 @@ export function Window({ win }: WindowProps) {
         />
       )}
       <header
-        className="flex h-10 shrink-0 cursor-grab items-center gap-2 border-b border-os-line px-2 active:cursor-grabbing"
+        className="flex h-11 shrink-0 cursor-grab items-center gap-3 border-b border-white/8 px-3 active:cursor-grabbing"
         onPointerDown={onTitlePointerDown}
         onPointerMove={onTitlePointerMove}
         onPointerUp={onTitlePointerUp}
         onDoubleClick={() => toggleMaximize(win.id)}
       >
-        <AppIcon id={win.appId} className="h-4 w-4 text-os-accent" />
-        <h2 id={`${win.id}-title`} className="min-w-0 flex-1 truncate font-mono text-xs">
-          {win.filename}
-        </h2>
-        <div className="flex items-center gap-1">
-          <WindowButton label={`Minimize ${win.filename}`} onClick={() => minimizeWindow(win.id)}>
-            <span className="mb-1.5 block h-px w-2.5 bg-current" />
-          </WindowButton>
-          <WindowButton
+        <div className="flex items-center gap-1.5">
+          <TrafficLight
+            label={`Close ${win.filename}`}
+            color="bg-[#ff5f57] hover:brightness-110"
+            onClick={() => closeWindow(win.id)}
+          />
+          <TrafficLight
+            label={`Minimize ${win.filename}`}
+            color="bg-[#febc2e] hover:brightness-110"
+            onClick={() => minimizeWindow(win.id)}
+          />
+          <TrafficLight
             label={maximized ? `Restore ${win.filename}` : `Maximize ${win.filename}`}
+            color="bg-[#28c840] hover:brightness-110"
             onClick={() => toggleMaximize(win.id)}
-          >
-            <span className="block h-2 w-2 rounded-[2px] border border-current" />
-          </WindowButton>
-          <WindowButton label={`Close ${win.filename}`} onClick={() => closeWindow(win.id)} danger>
-            <span className="text-xs leading-none">×</span>
-          </WindowButton>
+          />
         </div>
+        <h2 id={`${win.id}-title`} className="min-w-0 flex-1 truncate text-center text-[13px] font-medium">
+          {win.title}
+        </h2>
+        <AppIcon id={win.appId} className="h-4 w-4 text-os-muted" />
       </header>
 
       <div className="min-h-0 flex-1 overflow-auto">
@@ -156,16 +159,14 @@ export function Window({ win }: WindowProps) {
   );
 }
 
-function WindowButton({
+function TrafficLight({
   label,
+  color,
   onClick,
-  children,
-  danger,
 }: {
   label: string;
+  color: string;
   onClick: () => void;
-  children: ReactNode;
-  danger?: boolean;
 }) {
   return (
     <button
@@ -176,13 +177,8 @@ function WindowButton({
         onClick();
       }}
       onPointerDown={(event) => event.stopPropagation()}
-      className={cn(
-        "flex h-6 w-6 items-center justify-center text-os-muted transition hover:bg-os-raised hover:text-os-text focus-visible:outline-2 focus-visible:outline-os-accent",
-        danger && "hover:bg-os-fail/15 hover:text-os-fail",
-      )}
-    >
-      {children}
-    </button>
+      className={cn("h-3 w-3 rounded-full", color)}
+    />
   );
 }
 
