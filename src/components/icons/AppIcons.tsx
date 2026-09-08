@@ -108,6 +108,32 @@ export function ContactIcon({ className }: IconProps) {
   );
 }
 
+export function FilesIcon({ className }: IconProps) {
+  return (
+    <Frame className={className}>
+      <path
+        d="M8 10.5h6l2 2.5h8.5v11A1.5 1.5 0 0 1 23 25.5H9A1.5 1.5 0 0 1 7.5 24V12A1.5 1.5 0 0 1 9 10.5Z"
+        stroke="currentColor"
+        strokeWidth="1.6"
+      />
+    </Frame>
+  );
+}
+
+export function SettingsIcon({ className }: IconProps) {
+  return (
+    <Frame className={className}>
+      <circle cx="16" cy="16" r="3.2" stroke="currentColor" strokeWidth="1.6" />
+      <path
+        d="M16 7v2.2M16 22.8V25M7 16h2.2M22.8 16H25M9.7 9.7l1.6 1.6M20.7 20.7l1.6 1.6M9.7 22.3l1.6-1.6M20.7 11.3l1.6-1.6"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+      />
+    </Frame>
+  );
+}
+
 export function OsMark({ className }: IconProps) {
   return (
     <Frame className={className}>
@@ -127,6 +153,8 @@ const icons: Record<AppId, (props: IconProps) => ReactNode> = {
   resume: ResumeIcon,
   github: GithubIcon,
   contact: ContactIcon,
+  files: FilesIcon,
+  settings: SettingsIcon,
 };
 
 export function AppIcon({ id, className }: { id: AppId; className?: string }) {

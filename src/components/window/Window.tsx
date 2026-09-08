@@ -1,11 +1,9 @@
-import { useRef, type PointerEvent, type ReactNode } from "react";
-import { motion } from "framer-motion";
+import { useRef, useState, type PointerEvent, type ReactNode } from "react";
 import { AppIcon } from "@/components/icons/AppIcons";
 import { AppContent } from "@/components/apps/AppContent";
 import { TASKBAR_HEIGHT, TOPBAR_HEIGHT, WINDOW_MIN_HEIGHT, WINDOW_MIN_WIDTH } from "@/lib/layout";
 import { cn } from "@/lib/cn";
 import { useIsMobile } from "@/hooks/useMediaQuery";
-import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import { useOsStore } from "@/store/osStore";
 import type { OsWindow } from "@/types/os";
 
@@ -15,7 +13,6 @@ interface WindowProps {
 
 export function Window({ win }: WindowProps) {
   const isMobile = useIsMobile();
-  const reducedMotion = usePrefersReducedMotion();
   const activeId = useOsStore((s) => s.activeId);
   const focusWindow = useOsStore((s) => s.focusWindow);
   const closeWindow = useOsStore((s) => s.closeWindow);
@@ -23,7 +20,10 @@ export function Window({ win }: WindowProps) {
   const toggleMaximize = useOsStore((s) => s.toggleMaximize);
   const moveWindow = useOsStore((s) => s.moveWindow);
   const resizeWindow = useOsStore((s) => s.resizeWindow);
+  const snapWindow = useOsStore((s) => s.snapWindow);
   const dragRef = useRef<{ px: number; py: number; x: number; y: number } | null>(null);
+  const snapRef = useRef<"left" | "right" | "max" | null>(null);
+  const [snapEdge, setSnapEdge] = useState<"left" | "right" | "max" | null>(null);
 
   const active = activeId === win.id;
   const maximized = win.maximized || isMobile;
@@ -54,45 +54,70 @@ export function Window({ win }: WindowProps) {
     const dx = event.clientX - dragRef.current.px;
     const dy = event.clientY - dragRef.current.py;
     moveWindow(win.id, dragRef.current.x + dx, dragRef.current.y + dy);
+    const next =
+      event.clientY < TOPBAR_HEIGHT + 10
+        ? "max"
+        : event.clientX < 28
+          ? "left"
+          : event.clientX > window.innerWidth - 28
+            ? "right"
+            : null;
+    snapRef.current = next;
+    setSnapEdge(next);
   };
 
   const onTitlePointerUp = (event: PointerEvent<HTMLElement>) => {
+    const hint = snapRef.current;
+    const start = dragRef.current;
     dragRef.current = null;
+    snapRef.current = null;
+    setSnapEdge(null);
     if (event.currentTarget.hasPointerCapture(event.pointerId)) {
       event.currentTarget.releasePointerCapture(event.pointerId);
     }
+    if (!start) return;
+    const moved = Math.hypot(event.clientX - start.px, event.clientY - start.py) > 10;
+    if (!moved) return;
+    if (hint === "left") snapWindow(win.id, "left");
+    if (hint === "right") snapWindow(win.id, "right");
+    if (hint === "max") toggleMaximize(win.id);
   };
 
   return (
-    <motion.article
+    <article
       role="dialog"
       aria-label={`${win.filename} window`}
       aria-labelledby={`${win.id}-title`}
       onMouseDown={() => focusWindow(win.id)}
-      initial={
-        reducedMotion
-          ? false
-          : { opacity: 0, scale: 0.88, x: win.origin.x - (win.x + win.width / 2), y: win.origin.y - (win.y + 20) }
-      }
-      animate={{ opacity: 1, scale: 1, x: 0, y: 0 }}
-      exit={reducedMotion ? { opacity: 0 } : { opacity: 0, scale: 0.96 }}
-      transition={{ type: "spring", stiffness: 380, damping: 32, mass: 0.7 }}
+      onContextMenu={(event) => event.stopPropagation()}
       className={cn(
-        "absolute flex flex-col overflow-hidden rounded-xl",
+        "absolute flex flex-col overflow-hidden rounded",
         "pointer-events-auto glass-panel",
-        active ? "ring-1 ring-os-accent/30" : "opacity-95",
+        active ? "border-os-accent/55" : "opacity-95",
       )}
       style={{ ...style, zIndex: win.zIndex }}
     >
+      {snapEdge && (
+        <div
+          className="pointer-events-none fixed border border-os-accent/50 bg-os-accent/10"
+          style={
+            snapEdge === "max"
+              ? { left: 8, top: TOPBAR_HEIGHT + 8, width: "calc(100vw - 16px)", height: `calc(100dvh - ${TOPBAR_HEIGHT + TASKBAR_HEIGHT + 16}px)` }
+              : snapEdge === "left"
+                ? { left: 0, top: TOPBAR_HEIGHT, width: "50vw", height: `calc(100dvh - ${TOPBAR_HEIGHT + TASKBAR_HEIGHT}px)` }
+                : { right: 0, top: TOPBAR_HEIGHT, width: "50vw", height: `calc(100dvh - ${TOPBAR_HEIGHT + TASKBAR_HEIGHT}px)` }
+          }
+        />
+      )}
       <header
-        className="flex h-10 shrink-0 cursor-grab items-center gap-2 border-b border-white/8 px-2 active:cursor-grabbing"
+        className="flex h-10 shrink-0 cursor-grab items-center gap-2 border-b border-os-line px-2 active:cursor-grabbing"
         onPointerDown={onTitlePointerDown}
         onPointerMove={onTitlePointerMove}
         onPointerUp={onTitlePointerUp}
         onDoubleClick={() => toggleMaximize(win.id)}
       >
         <AppIcon id={win.appId} className="h-4 w-4 text-os-accent" />
-        <h2 id={`${win.id}-title`} className="min-w-0 flex-1 truncate font-mono text-xs tracking-[0.08em]">
+        <h2 id={`${win.id}-title`} className="min-w-0 flex-1 truncate font-mono text-xs">
           {win.filename}
         </h2>
         <div className="flex items-center gap-1">
@@ -127,7 +152,7 @@ export function Window({ win }: WindowProps) {
           <ResizeHandle edge="sw" win={win} resizeWindow={resizeWindow} />
         </>
       )}
-    </motion.article>
+    </article>
   );
 }
 
@@ -152,7 +177,7 @@ function WindowButton({
       }}
       onPointerDown={(event) => event.stopPropagation()}
       className={cn(
-        "flex h-6 w-6 items-center justify-center rounded-md text-os-muted transition hover:bg-white/8 hover:text-os-text focus-visible:outline-2 focus-visible:outline-os-accent",
+        "flex h-6 w-6 items-center justify-center text-os-muted transition hover:bg-os-raised hover:text-os-text focus-visible:outline-2 focus-visible:outline-os-accent",
         danger && "hover:bg-os-fail/15 hover:text-os-fail",
       )}
     >

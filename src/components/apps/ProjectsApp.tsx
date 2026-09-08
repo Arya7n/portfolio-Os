@@ -29,13 +29,13 @@ export function ProjectsApp() {
     <div className="space-y-4 p-4">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <p className="font-mono text-[10px] tracking-[0.24em] text-os-accent">PROJECT EXPLORER</p>
-          <h3 className="mt-1 font-display text-xl font-semibold">repositories</h3>
+          <p className="text-xs text-os-accent">Projects</p>
+          <h3 className="mt-1 font-display text-xl font-medium">Repositories</h3>
         </div>
         <button
           type="button"
           onClick={() => setShowAll((value) => !value)}
-          className="rounded-full border border-white/10 px-3 py-1.5 font-mono text-[11px] tracking-[0.12em] text-os-muted hover:text-os-text"
+          className="border border-os-line px-3 py-1.5 font-mono text-[11px] text-os-muted hover:text-os-text"
         >
           {showAll ? "FEATURED" : "ALL REPOS"}
         </button>

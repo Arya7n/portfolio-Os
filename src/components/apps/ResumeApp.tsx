@@ -26,14 +26,14 @@ export function ResumeApp() {
         <button
           type="button"
           onClick={downloadResume}
-          className="rounded-full border border-os-accent/40 bg-os-accent/10 px-3 py-1.5 font-mono text-[11px] tracking-[0.12em]"
+          className="border border-os-accent/40 bg-os-accent/10 px-3 py-1.5 text-xs"
         >
           Download resume
         </button>
         <button
           type="button"
           onClick={() => setRecruiterMode(true)}
-          className="rounded-full border border-white/10 px-3 py-1.5 font-mono text-[11px] tracking-[0.12em] text-os-muted hover:text-os-text"
+          className="border border-os-line px-3 py-1.5 text-xs text-os-muted hover:text-os-text"
         >
           Recruiter Mode
         </button>
@@ -41,7 +41,7 @@ export function ResumeApp() {
 
       <article className="mx-auto w-full max-w-2xl space-y-6 p-5 text-sm">
         <header>
-          <h3 className="font-display text-3xl font-bold tracking-[0.12em]">{profile.name}</h3>
+          <h3 className="font-display text-3xl font-medium">{profile.name}</h3>
           <p className="mt-1 text-os-muted">
             {profile.title} · {profile.focus}
           </p>
@@ -56,12 +56,12 @@ export function ResumeApp() {
         </header>
 
         <section>
-          <h4 className="font-mono text-[10px] tracking-[0.22em] text-os-muted">SUMMARY</h4>
+          <h4 className="text-xs text-os-muted">Summary</h4>
           <p className="mt-2 leading-relaxed text-os-text/90">{profile.summary}</p>
         </section>
 
         <section>
-          <h4 className="font-mono text-[10px] tracking-[0.22em] text-os-muted">EXPERIENCE</h4>
+          <h4 className="text-xs text-os-muted">Experience</h4>
           <div className="mt-3 space-y-4">
             {experience.map((role) => (
               <div key={role.id}>
@@ -80,7 +80,7 @@ export function ResumeApp() {
         </section>
 
         <section>
-          <h4 className="font-mono text-[10px] tracking-[0.22em] text-os-muted">PROJECTS</h4>
+          <h4 className="text-xs text-os-muted">Projects</h4>
           <div className="mt-3 space-y-3">
             {featured.map((project) => (
               <div key={project.id}>
@@ -95,7 +95,7 @@ export function ResumeApp() {
         </section>
 
         <section>
-          <h4 className="font-mono text-[10px] tracking-[0.22em] text-os-muted">SKILLS</h4>
+          <h4 className="text-xs text-os-muted">Skills</h4>
           <div className="mt-3 grid gap-2 sm:grid-cols-2">
             {skills.map((group) => (
               <p key={group.id} className="text-os-text/90">
@@ -107,7 +107,7 @@ export function ResumeApp() {
         </section>
 
         <section>
-          <h4 className="font-mono text-[10px] tracking-[0.22em] text-os-muted">EDUCATION</h4>
+          <h4 className="text-xs text-os-muted">Education</h4>
           <p className="mt-2 font-medium">{profile.education.degree}</p>
           <p className="text-xs text-os-muted">
             {profile.education.school} · {profile.education.start} – {profile.education.end} · CGPA{" "}

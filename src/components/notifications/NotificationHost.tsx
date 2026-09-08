@@ -14,11 +14,11 @@ export function NotificationHost() {
             initial={{ opacity: 0, x: 24, y: -6 }}
             animate={{ opacity: 1, x: 0, y: 0 }}
             exit={{ opacity: 0, x: 16 }}
-            className="pointer-events-auto glass-panel rounded-xl px-3 py-2.5"
+            className="pointer-events-auto glass-panel rounded px-3 py-2.5"
           >
             <div className="flex items-start justify-between gap-3">
               <div>
-                <p className="font-mono text-[10px] tracking-[0.18em] text-os-accent">{item.title}</p>
+                <p className="text-[11px] text-os-accent">{item.title}</p>
                 <p className="mt-1 text-sm text-os-text">{item.body}</p>
               </div>
               <button

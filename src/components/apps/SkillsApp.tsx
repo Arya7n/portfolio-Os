@@ -28,7 +28,7 @@ export function SkillsApp() {
     <div className="flex min-h-full flex-col">
       <div className="space-y-3 border-b border-white/8 p-4">
         <div>
-          <p className="font-mono text-[10px] tracking-[0.24em] text-os-accent">TECHNOLOGY GRAPH</p>
+          <p className="text-xs text-os-accent">Skills</p>
           <p className="mt-1 text-xs text-os-muted">Hover for context. Click a node to pin related systems.</p>
         </div>
         <div className="flex flex-wrap gap-1.5">

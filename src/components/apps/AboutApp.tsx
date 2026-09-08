@@ -13,25 +13,25 @@ export function AboutApp() {
     <div className="space-y-6 p-5 text-sm">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="font-mono text-[10px] tracking-[0.28em] text-os-accent">IDENT</p>
-          <h3 className="mt-2 font-display text-3xl font-bold tracking-[0.14em]">{profile.name}</h3>
+          <p className="text-xs text-os-accent">About</p>
+          <h3 className="mt-1 font-display text-3xl font-medium">{profile.name}</h3>
           <p className="mt-2 text-os-muted">{profile.title}</p>
           <p className="text-os-accent">{profile.focus}</p>
         </div>
-        <span className="rounded-full border border-os-ok/30 bg-os-ok/10 px-2.5 py-1 font-mono text-[10px] tracking-[0.16em] text-os-ok">
-          ONLINE
+        <span className="border border-os-ok/40 bg-os-ok/10 px-2.5 py-1 font-mono text-[10px] text-os-ok">
+          online
         </span>
       </div>
 
       <p className="leading-relaxed text-os-text/90">{profile.summary}</p>
 
       <div>
-        <p className="font-mono text-[10px] tracking-[0.22em] text-os-muted">FOCUS</p>
+        <p className="text-xs text-os-muted">Focus</p>
         <ul className="mt-2 flex flex-wrap gap-2">
           {profile.specializations.map((item) => (
             <li
               key={item}
-              className="rounded-full border border-white/10 bg-white/4 px-2.5 py-1 text-xs text-os-text/90"
+              className="border border-os-line bg-os-raised/50 px-2.5 py-1 text-xs text-os-text/90"
             >
               {item}
             </li>
@@ -57,7 +57,7 @@ export function AboutApp() {
             href={link.href}
             target="_blank"
             rel="noreferrer"
-            className="rounded-full border border-os-accent/30 bg-os-accent/10 px-3 py-1.5 text-xs tracking-[0.12em] text-os-text transition hover:border-os-accent"
+            className="border border-os-accent/40 bg-os-accent/10 px-3 py-1.5 text-xs text-os-text transition hover:border-os-accent"
           >
             {link.label} ↗
           </a>
@@ -65,14 +65,14 @@ export function AboutApp() {
         <button
           type="button"
           onClick={() => openApp("github")}
-          className="rounded-full border border-white/10 px-3 py-1.5 text-xs tracking-[0.12em] text-os-muted hover:text-os-text"
+          className="border border-os-line px-3 py-1.5 text-xs text-os-muted hover:text-os-text"
         >
           github.exe
         </button>
         <button
           type="button"
           onClick={() => setRecruiterMode(true)}
-          className="rounded-full border border-white/10 px-3 py-1.5 text-xs tracking-[0.12em] text-os-muted hover:text-os-text"
+          className="border border-os-line px-3 py-1.5 text-xs text-os-muted hover:text-os-text"
         >
           Recruiter Mode
         </button>
@@ -87,8 +87,8 @@ export function AboutApp() {
 
 function Meta({ label, value, detail }: { label: string; value: string; detail: string }) {
   return (
-    <div className="rounded-xl border border-white/8 bg-white/[0.03] p-3">
-      <p className="font-mono text-[10px] tracking-[0.2em] text-os-muted">{label.toUpperCase()}</p>
+    <div className="border border-os-line bg-os-raised/40 p-3">
+      <p className="text-[11px] text-os-muted">{label}</p>
       <p className="mt-1 font-medium">{value}</p>
       <p className="mt-0.5 text-xs text-os-muted">{detail}</p>
     </div>

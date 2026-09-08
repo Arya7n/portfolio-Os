@@ -1,62 +1,112 @@
-import { Wifi } from "lucide-react";
+import { useState } from "react";
 import { OsMark } from "@/components/icons/AppIcons";
-import { useClock } from "@/hooks/useClock";
 import { cn } from "@/lib/cn";
 import { useOsStore } from "@/store/osStore";
 
 export function TopBar() {
-  const { time, date } = useClock();
   const setRecruiterMode = useOsStore((s) => s.setRecruiterMode);
-  const windowCount = useOsStore((s) => s.windows.length);
+  const setSpotlight = useOsStore((s) => s.setSpotlight);
+  const openApp = useOsStore((s) => s.openApp);
+  const lock = useOsStore((s) => s.lock);
+  const windows = useOsStore((s) => s.windows);
+  const activeId = useOsStore((s) => s.activeId);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const active = windows.find((win) => win.id === activeId && !win.minimized);
 
   return (
-    <header className="relative z-40 flex h-10 items-center justify-between border-b border-white/8 bg-black/35 px-3 backdrop-blur-xl sm:px-4">
-      <div className="flex items-center gap-2 text-os-accent">
-        <OsMark className="h-4 w-4" />
-        <span className="font-display text-[13px] font-semibold tracking-[0.22em]">ARYAN OS</span>
-        <span className="hidden font-mono text-[10px] text-os-muted sm:inline">v1.0</span>
+    <header className="relative z-40 flex h-10 items-center justify-between border-b border-os-line bg-os-panel/92 px-2 sm:px-3">
+      <div className="relative flex min-w-0 items-center gap-2">
+        <button
+          type="button"
+          className={cn(
+            "flex items-center gap-1.5 px-1.5 py-1 text-os-accent hover:bg-os-raised",
+            menuOpen && "bg-os-raised",
+          )}
+          aria-expanded={menuOpen}
+          aria-haspopup="menu"
+          onClick={() => setMenuOpen((open) => !open)}
+        >
+          <OsMark className="h-4 w-4" />
+          <span className="font-display text-[13px] font-medium">Aryan OS</span>
+        </button>
+        {menuOpen && (
+          <>
+            <button
+              type="button"
+              className="fixed inset-0 z-40 cursor-default"
+              aria-label="Close system menu"
+              onClick={() => setMenuOpen(false)}
+            />
+            <div className="glass-panel absolute left-0 top-full z-50 mt-1 min-w-48 py-1" role="menu">
+              <MenuItem
+                label="About this machine"
+                onClick={() => {
+                  openApp("about");
+                  setMenuOpen(false);
+                }}
+              />
+              <MenuItem
+                label="Files"
+                onClick={() => {
+                  openApp("files");
+                  setMenuOpen(false);
+                }}
+              />
+              <MenuItem
+                label="Settings"
+                onClick={() => {
+                  openApp("settings");
+                  setMenuOpen(false);
+                }}
+              />
+              <div className="my-1 h-px bg-os-line" />
+              <MenuItem
+                label="Recruiter Mode"
+                onClick={() => {
+                  setRecruiterMode(true);
+                  setMenuOpen(false);
+                }}
+              />
+              <MenuItem
+                label="Lock"
+                onClick={() => {
+                  lock();
+                  setMenuOpen(false);
+                }}
+              />
+            </div>
+          </>
+        )}
+        {active && (
+          <span className="hidden truncate font-mono text-[11px] text-os-muted md:inline">{active.filename}</span>
+        )}
       </div>
 
-      <div className="hidden items-center gap-4 font-mono text-[11px] text-os-muted md:flex">
-        <span className="flex items-center gap-1.5">
-          <Wifi className="h-3.5 w-3.5" aria-hidden="true" />
-          LINK
-        </span>
-        <Meter label="CPU" value={18} />
-        <Meter label="RAM" value={42} />
-        <span>{windowCount} PROC</span>
-      </div>
-
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-1">
+        <button
+          type="button"
+          onClick={() => setSpotlight(true)}
+          className="hidden border border-os-line px-2.5 py-1 font-mono text-[11px] text-os-muted hover:border-os-accent hover:text-os-text sm:inline"
+        >
+          Search
+          <span className="ml-2 text-[10px] opacity-70">Ctrl+K</span>
+        </button>
         <button
           type="button"
           onClick={() => setRecruiterMode(true)}
-          className="rounded-full border border-white/10 px-2.5 py-1 font-mono text-[10px] tracking-[0.14em] text-os-muted transition hover:border-os-accent/40 hover:text-os-text focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-os-accent"
+          className="border border-os-line px-2 py-1 font-mono text-[10px] text-os-muted hover:border-os-accent hover:text-os-text"
         >
-          RECRUITER
+          Recruiter
         </button>
-        <time
-          dateTime={new Date().toISOString()}
-          className="font-mono text-[11px] tabular-nums text-os-text"
-          title={date}
-        >
-          {time}
-        </time>
       </div>
     </header>
   );
 }
 
-function Meter({ label, value }: { label: string; value: number }) {
+function MenuItem({ label, onClick }: { label: string; onClick: () => void }) {
   return (
-    <span className="flex items-center gap-1.5" aria-label={`${label} ${value} percent`}>
+    <button type="button" role="menuitem" className="block w-full px-3 py-1.5 text-left text-sm hover:bg-os-accent/15" onClick={onClick}>
       {label}
-      <span className="h-1 w-10 overflow-hidden rounded-full bg-white/10">
-        <span
-          className={cn("block h-full rounded-full bg-os-accent/80")}
-          style={{ width: `${value}%` }}
-        />
-      </span>
-    </span>
+    </button>
   );
 }

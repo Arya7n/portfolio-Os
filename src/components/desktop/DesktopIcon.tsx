@@ -30,16 +30,14 @@ export function DesktopIcon({ app }: DesktopIconProps) {
       title={app.description}
       aria-label={`Open ${app.filename}`}
       className={cn(
-        "group flex w-[88px] flex-col items-center gap-2 rounded-xl p-2 text-center transition",
-        "hover:-translate-y-0.5 hover:bg-white/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-os-accent",
-        active && "bg-white/6",
+        "group flex w-[88px] flex-col items-center gap-2 p-2 text-center transition",
+        "hover:bg-black/25 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-os-accent",
+        active && "bg-black/30",
       )}
     >
-      <span className="relative flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-gradient-to-b from-white/10 to-white/5 text-os-accent shadow-[0_8px_24px_rgba(0,0,0,0.28)] transition group-hover:border-os-accent/40 group-hover:shadow-[0_0_24px_rgba(142,180,255,0.18)]">
+      <span className="relative flex h-12 w-12 items-center justify-center border border-os-line bg-os-panel text-os-accent">
         <AppIcon id={app.id} className="h-7 w-7" />
-        {active && (
-          <span className="absolute -bottom-1 h-1 w-1 rounded-full bg-os-accent" />
-        )}
+        {active && <span className="absolute -bottom-1 h-1 w-1 bg-os-accent" />}
       </span>
       <span className="font-mono text-[11px] leading-tight text-os-text/90">
         {app.filename}

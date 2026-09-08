@@ -13,22 +13,22 @@ export function RecruiterMode() {
   const phase = useOsStore((s) => s.phase);
 
   return (
-    <div className="fixed inset-0 z-[100] overflow-auto bg-[#0a0d12] text-os-text">
+    <div id="recruiter" className="fixed inset-0 z-[100] overflow-auto bg-os-void text-os-text">
       <div className="mx-auto max-w-3xl px-5 py-8 sm:py-12">
         <div className="mb-8 flex flex-wrap items-center justify-between gap-3">
-          <p className="font-mono text-[11px] tracking-[0.22em] text-os-accent">RECRUITER MODE</p>
+          <p className="text-xs text-os-accent">Recruiter Mode</p>
           <div className="flex gap-2">
             <button
               type="button"
               onClick={downloadResume}
-              className="rounded-full border border-white/12 px-3 py-1.5 text-xs tracking-[0.12em]"
+              className="border border-os-line px-3 py-1.5 text-xs"
             >
               Download resume
             </button>
             <button
               type="button"
               onClick={() => window.print()}
-              className="rounded-full border border-white/12 px-3 py-1.5 text-xs tracking-[0.12em]"
+              className="border border-os-line px-3 py-1.5 text-xs"
             >
               Print / Save PDF
             </button>
@@ -38,14 +38,14 @@ export function RecruiterMode() {
                 setRecruiterMode(false);
                 if (phase !== "desktop") enterDesktop();
               }}
-              className="rounded-full border border-os-accent/40 px-3 py-1.5 text-xs tracking-[0.12em]"
+              className="border border-os-accent/40 px-3 py-1.5 text-xs"
             >
-              Enter ARYAN OS
+              Enter desktop
             </button>
             <button
               type="button"
               onClick={() => setRecruiterMode(false)}
-              className="rounded-full border border-white/12 px-3 py-1.5 text-xs tracking-[0.12em] text-os-muted"
+              className="border border-os-line px-3 py-1.5 text-xs text-os-muted"
             >
               Close
             </button>
@@ -53,7 +53,7 @@ export function RecruiterMode() {
         </div>
 
         <header className="border-b border-white/10 pb-6">
-          <h1 className="font-display text-4xl font-bold tracking-[0.12em]">{profile.name}</h1>
+          <h1 className="font-display text-4xl font-medium">{profile.name}</h1>
           <p className="mt-2 text-os-muted">
             {profile.title} · {profile.focus}
           </p>
@@ -141,7 +141,7 @@ export function RecruiterMode() {
 function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
     <section className="border-b border-white/10 py-6">
-      <h2 className="mb-3 font-mono text-[11px] tracking-[0.22em] text-os-muted">{title.toUpperCase()}</h2>
+      <h2 className="mb-3 text-xs text-os-muted">{title}</h2>
       {children}
     </section>
   );

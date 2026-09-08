@@ -6,7 +6,9 @@ export type AppId =
   | "terminal"
   | "resume"
   | "github"
-  | "contact";
+  | "contact"
+  | "files"
+  | "settings";
 
 export interface DesktopApp {
   id: AppId;
@@ -16,6 +18,7 @@ export interface DesktopApp {
   defaultWidth: number;
   defaultHeight: number;
   phase: 1 | 2 | 3;
+  onDesktop?: boolean;
 }
 
 export const desktopApps: DesktopApp[] = [
@@ -27,6 +30,7 @@ export const desktopApps: DesktopApp[] = [
     defaultWidth: 560,
     defaultHeight: 680,
     phase: 1,
+    onDesktop: true,
   },
   {
     id: "experience",
@@ -36,6 +40,7 @@ export const desktopApps: DesktopApp[] = [
     defaultWidth: 820,
     defaultHeight: 620,
     phase: 2,
+    onDesktop: true,
   },
   {
     id: "projects",
@@ -45,6 +50,7 @@ export const desktopApps: DesktopApp[] = [
     defaultWidth: 880,
     defaultHeight: 640,
     phase: 2,
+    onDesktop: true,
   },
   {
     id: "skills",
@@ -54,15 +60,17 @@ export const desktopApps: DesktopApp[] = [
     defaultWidth: 880,
     defaultHeight: 640,
     phase: 2,
+    onDesktop: true,
   },
   {
     id: "terminal",
     filename: "terminal.exe",
     title: "Terminal",
     description: "Command interface",
-    defaultWidth: 640,
-    defaultHeight: 420,
+    defaultWidth: 720,
+    defaultHeight: 520,
     phase: 3,
+    onDesktop: true,
   },
   {
     id: "resume",
@@ -72,26 +80,49 @@ export const desktopApps: DesktopApp[] = [
     defaultWidth: 720,
     defaultHeight: 740,
     phase: 2,
+    onDesktop: true,
   },
   {
     id: "github",
     filename: "github.exe",
     title: "GitHub",
     description: "Public repositories",
-    defaultWidth: 680,
-    defaultHeight: 540,
+    defaultWidth: 720,
+    defaultHeight: 640,
     phase: 3,
+    onDesktop: true,
   },
   {
     id: "contact",
     filename: "contact.exe",
     title: "Contact",
-    description: "Send a transmission",
-    defaultWidth: 480,
-    defaultHeight: 480,
+    description: "Send a local message",
+    defaultWidth: 520,
+    defaultHeight: 560,
+    phase: 3,
+    onDesktop: true,
+  },
+  {
+    id: "files",
+    filename: "files",
+    title: "Files",
+    description: "Home directory",
+    defaultWidth: 640,
+    defaultHeight: 520,
+    phase: 3,
+  },
+  {
+    id: "settings",
+    filename: "settings",
+    title: "Settings",
+    description: "System preferences",
+    defaultWidth: 520,
+    defaultHeight: 560,
     phase: 3,
   },
 ];
+
+export const desktopShortcuts = desktopApps.filter((app) => app.onDesktop);
 
 export function getApp(id: AppId): DesktopApp {
   const app = desktopApps.find((item) => item.id === id);

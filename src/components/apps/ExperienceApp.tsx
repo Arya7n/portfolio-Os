@@ -20,7 +20,7 @@ export function ExperienceApp() {
   return (
     <div className="grid min-h-full lg:grid-cols-[minmax(220px,280px)_1fr]">
       <nav className="border-b border-white/8 p-4 lg:border-b-0 lg:border-r" aria-label="Experience timeline">
-        <p className="font-mono text-[10px] tracking-[0.24em] text-os-accent">TIMELINE</p>
+        <p className="text-xs text-os-accent">Experience</p>
         <div className="mt-4 space-y-6">
           {grouped.map(([year, roles]) => (
             <div key={year}>
@@ -62,10 +62,8 @@ function ExperienceDetail({ role }: { role: ExperienceRole }) {
   return (
     <div className="space-y-5 p-5">
       <div>
-        <p className="font-mono text-[10px] tracking-[0.24em] text-os-accent">
-          {role.current ? "CURRENT" : "ROLE"}
-        </p>
-        <h3 className="mt-2 font-display text-2xl font-semibold tracking-wide">{role.company}</h3>
+        <p className="text-xs text-os-accent">{role.current ? "Current" : "Role"}</p>
+        <h3 className="mt-2 font-display text-2xl font-medium">{role.company}</h3>
         <p className="mt-1 text-sm text-os-muted">
           {role.role} · {role.start} – {role.end}
         </p>
@@ -91,7 +89,7 @@ function ExperienceDetail({ role }: { role: ExperienceRole }) {
       </div>
 
       <div>
-        <p className="font-mono text-[10px] tracking-[0.2em] text-os-muted">RESPONSIBILITIES</p>
+        <p className="text-xs text-os-muted">Responsibilities</p>
         <ul className="mt-2 space-y-2 text-sm leading-relaxed text-os-text/90">
           {role.highlights.map((item) => (
             <li key={item} className="flex gap-2">
@@ -103,12 +101,12 @@ function ExperienceDetail({ role }: { role: ExperienceRole }) {
       </div>
 
       <div>
-        <p className="font-mono text-[10px] tracking-[0.2em] text-os-muted">TECHNOLOGIES</p>
+        <p className="text-xs text-os-muted">Technologies</p>
         <ul className="mt-2 flex flex-wrap gap-2">
           {role.technologies.map((tech) => (
             <li
               key={tech}
-              className="rounded-full border border-white/10 bg-white/4 px-2.5 py-1 text-xs"
+              className="border border-os-line bg-os-raised/40 px-2.5 py-1 text-xs"
             >
               {tech}
             </li>
