@@ -26,7 +26,7 @@ export function LockScreen() {
   return (
     <div className="fixed inset-0 z-[120] flex flex-col items-center justify-center text-os-text">
       <WallpaperLayer dim />
-      <p className="relative font-display text-7xl font-semibold tabular-nums tracking-tight">{time}</p>
+      <p className="relative font-display text-5xl font-semibold tabular-nums tracking-tight sm:text-7xl">{time}</p>
       <p className="relative mt-2 text-os-muted">{date}</p>
       <p className="relative mt-10 font-display text-2xl font-medium">{profile.name}</p>
       <p className="relative text-sm text-os-muted">{profile.title}</p>

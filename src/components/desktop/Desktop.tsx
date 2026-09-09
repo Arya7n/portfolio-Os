@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
-import { MobileLauncher } from "@/components/desktop/MobileLauncher";
 import { WallpaperLayer } from "@/components/desktop/WallpaperLayer";
 import { SceneBackdrop } from "@/components/scene/SceneBackdrop";
 import { DesktopIcon } from "@/components/desktop/DesktopIcon";
@@ -25,6 +24,8 @@ export function Desktop() {
   const pushNotification = useOsStore((s) => s.pushNotification);
   const openContextMenu = useOsStore((s) => s.openContextMenu);
   const mobile = useIsMobile();
+  const hasWindow = useOsStore((s) => s.windows.some((win) => !win.minimized));
+  const showHome = !mobile || !hasWindow;
 
   useKonami(() => {
     unlockDeveloperMode();
@@ -125,27 +126,27 @@ export function Desktop() {
       <TopBar />
 
       <div
-        className="relative flex min-h-0 flex-1"
+        className="relative flex min-h-0 flex-1 max-md:flex-col max-md:overflow-y-auto"
         onMouseDown={() => {
           closeChrome();
           selectApp(null);
         }}
       >
-        {mobile ? (
-          <MobileLauncher />
-        ) : (
-          <div
-            className="relative z-30 flex w-auto flex-col gap-1 p-4 pt-5"
-            onMouseDown={(event) => event.stopPropagation()}
-          >
-            <div className="grid grid-cols-1 gap-1">
-              {desktopShortcuts.map((app) => (
-                <DesktopIcon key={app.id} app={app} />
-              ))}
+        {showHome && (
+          <>
+            <div
+              className="relative z-30 shrink-0 p-2 pt-3 md:p-4 md:pt-5"
+              onMouseDown={(event) => event.stopPropagation()}
+            >
+              <div className="grid grid-cols-4 gap-1 sm:grid-cols-5 md:grid-cols-1 md:gap-1">
+                {desktopShortcuts.map((app) => (
+                  <DesktopIcon key={app.id} app={app} />
+                ))}
+              </div>
             </div>
-          </div>
+            <DesktopWidgets />
+          </>
         )}
-        {!mobile && <DesktopWidgets />}
         <WindowManager />
       </div>
 

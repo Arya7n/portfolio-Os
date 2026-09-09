@@ -37,14 +37,14 @@ export function DesktopIcon({ app }: DesktopIconProps) {
         }
       }}
       className={cn(
-        "group flex w-[92px] flex-col items-center gap-1.5 rounded-xl p-2 text-center transition",
+        "group mx-auto flex w-full max-w-[92px] flex-col items-center gap-1 rounded-xl p-1.5 text-center transition md:gap-1.5 md:p-2",
         "hover:bg-white/8 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-os-accent",
         selected && "bg-white/12",
       )}
     >
       <span
         className={cn(
-          "relative flex h-12 w-12 items-center justify-center rounded-[15px] bg-white/10 text-os-text shadow-[0_8px_20px_rgba(0,0,0,0.28)] transition",
+          "relative flex h-10 w-10 items-center justify-center rounded-[13px] bg-white/10 text-os-text shadow-[0_8px_20px_rgba(0,0,0,0.28)] transition md:h-12 md:w-12 md:rounded-[15px]",
           "group-hover:scale-105 group-hover:shadow-[0_10px_24px_rgba(10,132,255,0.22)]",
           selected && "ring-1 ring-white/25",
         )}
@@ -52,7 +52,7 @@ export function DesktopIcon({ app }: DesktopIconProps) {
         <AppIcon id={app.id} className="h-6 w-6" />
         {running && <span className="absolute -bottom-1 h-1 w-1 rounded-full bg-os-accent" />}
       </span>
-      <span className="max-w-full truncate font-mono text-[10px] leading-tight text-os-text/85">
+      <span className="max-w-full truncate font-mono text-[9px] leading-tight text-os-text/85 md:text-[10px]">
         {app.filename}
       </span>
     </button>
