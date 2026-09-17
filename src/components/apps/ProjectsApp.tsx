@@ -109,7 +109,7 @@ function ProjectDetail({ project, onBack }: { project: Project; onBack: () => vo
         </div>
       </div>
 
-      <div className="flex gap-1 overflow-x-auto border-b border-white/8 px-4 py-2">
+      <div className="os-scroll-thin flex gap-1 overflow-x-auto border-b border-white/8 px-4 py-2">
         {tabs.map((item) => (
           <button
             key={item}

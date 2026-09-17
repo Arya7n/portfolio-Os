@@ -75,7 +75,7 @@ export function Spotlight() {
             }
           }}
         />
-        <ul className="max-h-72 overflow-auto py-1">
+        <ul className="os-scroll-thin max-h-72 overflow-auto py-1">
           {results.map((item) => (
             <li key={item.id}>
               <button

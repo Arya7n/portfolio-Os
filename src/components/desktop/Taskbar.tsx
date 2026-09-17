@@ -44,7 +44,7 @@ export function Taskbar() {
                 }}
               />
             </div>
-            <div className="grid max-h-80 grid-cols-2 gap-1 overflow-auto p-2 sm:grid-cols-3">
+            <div className="os-scroll-thin grid max-h-80 grid-cols-2 gap-1 overflow-auto p-2 sm:grid-cols-3">
               {filteredApps.length === 0 && (
                 <p className="col-span-full px-2 py-6 text-center text-xs text-os-muted">No applications match.</p>
               )}

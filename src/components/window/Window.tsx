@@ -100,9 +100,8 @@ export function Window({ win }: WindowProps) {
       }}
       onContextMenu={(event) => event.stopPropagation()}
       className={cn(
-        "absolute flex flex-col overflow-hidden rounded-[12px]",
-        "pointer-events-auto glass-panel",
-        active ? "shadow-[0_24px_60px_rgba(0,0,0,0.45)]" : "opacity-[0.88]",
+        "os-window pointer-events-auto absolute flex flex-col overflow-hidden rounded-[12px]",
+        active ? "os-window-active" : "os-window-inactive",
       )}
       initial={reduced ? false : { opacity: 0, scale: 0.84 }}
       animate={{ opacity: 1, scale: 1 }}
@@ -123,14 +122,17 @@ export function Window({ win }: WindowProps) {
         />
       )}
       <header
-        className="flex h-10 shrink-0 cursor-grab items-center gap-2 px-1.5 active:cursor-grabbing"
+        className="flex h-10 shrink-0 cursor-grab items-center gap-2 border-b border-white/[0.06] px-1.5 active:cursor-grabbing"
         onPointerDown={onTitlePointerDown}
         onPointerMove={onTitlePointerMove}
         onPointerUp={onTitlePointerUp}
         onDoubleClick={() => toggleMaximize(win.id)}
       >
         <AppIcon id={win.appId} className="ml-1.5 h-3.5 w-3.5 shrink-0 text-os-muted" />
-        <h2 id={`${win.id}-title`} className="min-w-0 flex-1 truncate text-[13px] font-medium text-os-text/80">
+        <h2
+          id={`${win.id}-title`}
+          className="os-window-title min-w-0 flex-1 truncate text-[13px] font-medium text-os-text/80"
+        >
           {win.title}
         </h2>
         <div className="flex shrink-0 items-center">
@@ -156,8 +158,13 @@ export function Window({ win }: WindowProps) {
         </div>
       </header>
 
-      <div className="min-h-0 flex-1 overflow-auto">
-        <AppContent appId={win.appId} />
+      <div className="relative min-h-0 flex-1">
+        <div className="os-window-body h-full overflow-auto">
+          <AppContent appId={win.appId} />
+        </div>
+        {!active && (
+          <div className="pointer-events-none absolute inset-0 bg-black/20" aria-hidden="true" />
+        )}
       </div>
 
       {!maximized && (

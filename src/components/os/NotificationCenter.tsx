@@ -17,7 +17,7 @@ export function NotificationCenter() {
       {log.length === 0 ? (
         <p className="text-[12px] text-os-muted">You’re all caught up.</p>
       ) : (
-        <ul className="max-h-72 space-y-2 overflow-auto">
+        <ul className="os-scroll-thin max-h-72 space-y-2 overflow-auto">
           {log.map((item) => (
             <li key={item.id} className="rounded-xl bg-white/5 px-3 py-2">
               <p className="text-[11px] text-os-muted">{item.title}</p>

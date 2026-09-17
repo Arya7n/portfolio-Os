@@ -34,6 +34,43 @@ body {
 
 * {
   box-sizing: border-box;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.22) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 4px 0;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.2);
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background-clip: padding-box;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.38);
+}
+
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+.os-scroll-thin {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.16) transparent;
+}
+
+.os-scroll-thin::-webkit-scrollbar {
+  width: 8px;
+  height: 6px;
 }
 
 button,
@@ -54,13 +91,46 @@ textarea {
 }
 
 .glass-panel {
-  background: rgba(44, 44, 46, 0.78);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(36, 36, 38, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   box-shadow:
-    0 18px 50px rgba(0, 0, 0, 0.38),
+    0 18px 50px rgba(0, 0, 0, 0.42),
     inset 0 1px 0 rgba(255, 255, 255, 0.08);
   backdrop-filter: blur(28px) saturate(1.5);
   -webkit-backdrop-filter: blur(28px) saturate(1.5);
+}
+
+.os-window {
+  isolation: isolate;
+  background: #2c2c2e;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow:
+    0 22px 56px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.os-window-active {
+  border-color: rgba(255, 255, 255, 0.16);
+  box-shadow:
+    0 28px 70px rgba(0, 0, 0, 0.58),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.os-window-inactive {
+  background: #242426;
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 12px 32px rgba(0, 0, 0, 0.36),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.os-window-inactive .os-window-title {
+  color: rgba(245, 245, 247, 0.55);
+}
+
+.os-window-body {
+  background: #1c1c1e;
+  overscroll-behavior: contain;
 }
 
 .wall-harbor {

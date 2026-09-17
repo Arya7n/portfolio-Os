@@ -26,7 +26,7 @@ export const githubProfile = {
   username: "Arya7n",
   url: "https://github.com/Arya7n",
   avatar: "https://avatars.githubusercontent.com/u/160327550?v=4",
-  bio: "Full Stack Dev | Loves clean code",
-  publicRepos: 23,
-  followers: 3,
+  bio: "Full-Stack Developer • TypeScript • Node.js • React • NestJS",
+  publicRepos: 27,
+  followers: 4,
 };
