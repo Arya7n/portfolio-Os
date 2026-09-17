@@ -21,7 +21,7 @@ export function TopBar() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <header className="relative z-40 flex h-9 items-center justify-between bg-black/30 px-2 backdrop-blur-2xl">
+    <header className="relative z-40 flex h-9 min-w-0 items-center justify-between gap-1 bg-black/30 px-1.5 backdrop-blur-2xl sm:px-2">
       <div className="relative flex min-w-0 items-center gap-0.5">
         <button
           type="button"
@@ -92,7 +92,8 @@ export function TopBar() {
           )}
           onClick={toggleLauncher}
         >
-          Applications
+          <span className="hidden sm:inline">Applications</span>
+          <span className="sm:hidden">Apps</span>
         </button>
         <button
           type="button"
@@ -152,7 +153,7 @@ export function TopBar() {
       )}
       {tray === "net" && (
         <TrayFlyout onClose={() => setTray(null)}>
-          <div className="w-56 p-4">
+          <div className="w-[min(100vw-24px,14rem)] p-4">
             <p className="text-sm font-medium">Wi-Fi</p>
             <p className="mt-1 text-[11px] text-os-ok">{stats.online ? "Connected" : "Offline"}</p>
             <p className="mt-3 text-[12px] text-os-muted">{profile.location}</p>
@@ -161,7 +162,7 @@ export function TopBar() {
       )}
       {tray === "system" && (
         <TrayFlyout onClose={() => setTray(null)} align="left">
-          <div className="w-64 p-4 font-mono text-[12px]">
+          <div className="w-[min(100vw-24px,16rem)] p-4 font-mono text-[12px]">
             <p className="mb-3 text-[11px] tracking-[0.16em] text-os-muted">SYSTEM</p>
             <StatRow label="WEBGL" value={stats.webgl ? "Available" : "Unavailable"} ok={stats.webgl} />
             <StatRow label="NETWORK" value={stats.online ? "Online" : "Offline"} ok={stats.online} />
@@ -249,8 +250,8 @@ function TrayFlyout({
       <button type="button" className="fixed inset-0 z-40 cursor-default" aria-label="Close tray" onClick={onClose} />
       <div
         className={cn(
-          "glass-panel absolute top-full z-50 mt-1.5 overflow-hidden rounded-2xl",
-          align === "right" ? "right-2" : "left-2",
+          "glass-panel absolute top-full z-50 mt-1.5 max-w-[calc(100vw-12px)] overflow-hidden rounded-2xl",
+          align === "right" ? "right-1 sm:right-2" : "left-1 sm:left-2",
         )}
       >
         {children}

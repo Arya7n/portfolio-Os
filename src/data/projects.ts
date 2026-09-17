@@ -26,6 +26,77 @@ export interface Project {
 
 export const projects: Project[] = [
   {
+    id: "jobmate",
+    name: "JobMate",
+    description:
+      "Personal job application assistant Chrome extension. Stores your professional profile and resumes locally, autofills applications with confidence-based field detection, and tracks submissions — no backend or accounts.",
+    url: "https://github.com/Arya7n/JobMate",
+    language: "TypeScript",
+    languages: ["TypeScript", "HTML", "JavaScript", "CSS"],
+    technologies: [
+      "TypeScript",
+      "React",
+      "WXT",
+      "Tailwind CSS",
+      "Chrome Extension",
+      "IndexedDB",
+      "Vitest",
+    ],
+    topics: ["chrome-extension", "autofill", "job-search", "local-first", "privacy"],
+    featured: true,
+    stars: 0,
+    problem:
+      "Job applications ask for the same profile and resume data across many sites, while most autofill tools either miss fields or send data off-device.",
+    features: [
+      "Professional profile editor with typed on-device storage",
+      "Resume manager (metadata in chrome.storage, files in IndexedDB)",
+      "Field detection and confidence-based autofill content script",
+      "Application tracker and dashboard stats",
+      "Quick Copy from the popup",
+      "Privacy-focused settings",
+    ],
+    architecture: [
+      "Popup",
+      "Dashboard",
+      "Background service worker",
+      "Content script",
+      "chrome.storage + IndexedDB",
+    ],
+    architectureNodes: [
+      {
+        id: "popup",
+        label: "Popup",
+        summary: "Toolbar UI for quick actions and Quick Copy.",
+        points: ["Open dashboard", "Trigger autofill", "Copy profile fields"],
+      },
+      {
+        id: "dashboard",
+        label: "Dashboard",
+        summary: "Full app for profile, resumes, applications, and settings.",
+        points: ["Hash-routed views", "Application stats", "Privacy controls"],
+      },
+      {
+        id: "content",
+        label: "Content script",
+        summary: "Detects form fields on career pages and fills with confidence scoring.",
+        points: ["Field detection", "Confidence-based autofill", "On-page panel"],
+      },
+      {
+        id: "background",
+        label: "Background",
+        summary: "Extension messaging between popup, tabs, and content scripts.",
+        points: ["tabs / scripting / activeTab", "Popup ↔ page messaging"],
+      },
+      {
+        id: "storage",
+        label: "Local storage",
+        summary: "All profile, resume, and application data stays on device.",
+        points: ["chrome.storage for metadata", "IndexedDB for resume files", "No backend or analytics"],
+      },
+    ],
+    status: "V1 complete for local use — profile, resumes, autofill, tracker, and dashboard.",
+  },
+  {
     id: "devtunnel",
     name: "DevTunnel",
     description:

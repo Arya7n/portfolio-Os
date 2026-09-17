@@ -17,7 +17,7 @@ export function RecruiterMode() {
       <div className="mx-auto max-w-3xl px-5 py-8 sm:py-12">
         <div className="mb-8 flex flex-wrap items-center justify-between gap-3">
           <p className="font-mono text-[11px] tracking-[0.2em] text-os-muted">RECRUITER MODE</p>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             <button
               type="button"
               onClick={downloadResume}

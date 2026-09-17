@@ -27,11 +27,11 @@ export function Taskbar() {
   }, [query]);
 
   return (
-    <div className="relative z-50 flex justify-center px-3 pb-3 pt-1">
+    <div className="relative z-50 flex max-w-full justify-center px-2 pb-2 pt-1 sm:px-3 sm:pb-3">
       {launcherOpen && (
         <>
           <button type="button" aria-label="Close app grid" className="fixed inset-0 z-40 cursor-default bg-black/35 backdrop-blur-sm" onClick={() => { closeLauncher(); setQuery(""); }} />
-          <div className="glass-panel absolute bottom-[calc(100%+12px)] left-1/2 z-50 w-[min(92vw,520px)] -translate-x-1/2 overflow-hidden rounded-2xl" role="menu" aria-label="Applications">
+          <div className="glass-panel absolute bottom-[calc(100%+12px)] left-1/2 z-50 w-[min(calc(100vw-16px),520px)] -translate-x-1/2 overflow-hidden rounded-2xl" role="menu" aria-label="Applications">
             <div className="border-b border-white/8 px-4 py-3">
               <p className="font-mono text-[11px] tracking-[0.18em] text-os-muted">APPLICATIONS</p>
               <input
@@ -79,14 +79,14 @@ export function Taskbar() {
         </>
       )}
 
-      <nav aria-label="Dock" className="glass-panel flex h-[52px] items-center gap-1 rounded-2xl px-2">
+      <nav aria-label="Dock" className="glass-panel flex h-12 max-w-full items-center gap-0.5 overflow-x-auto rounded-2xl px-1.5 sm:h-[52px] sm:gap-1 sm:px-2">
         <button
           type="button"
           aria-label="Open applications"
           aria-expanded={launcherOpen}
           onClick={toggleLauncher}
           className={cn(
-            "flex h-10 w-10 items-center justify-center rounded-xl text-os-text hover:bg-white/10",
+            "flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-os-text hover:bg-white/10 sm:h-10 sm:w-10",
             launcherOpen && "bg-white/12",
           )}
         >
@@ -105,7 +105,7 @@ export function Taskbar() {
               aria-label={`Open ${id}`}
               onClick={() => openApp(id)}
               className={cn(
-                "relative flex h-10 w-10 items-center justify-center rounded-xl text-os-text transition-transform hover:scale-110 hover:bg-white/10",
+                "relative flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-os-text transition-transform hover:scale-110 hover:bg-white/10 sm:h-10 sm:w-10",
                 isActive && "bg-white/12",
               )}
             >
@@ -128,7 +128,7 @@ export function Taskbar() {
                 else focusWindow(win.id);
               }}
               className={cn(
-                "relative flex h-10 w-10 items-center justify-center rounded-xl transition-transform hover:scale-110 hover:bg-white/10",
+                "relative flex h-9 w-9 shrink-0 items-center justify-center rounded-xl transition-transform hover:scale-110 hover:bg-white/10 sm:h-10 sm:w-10",
                 isActive && "bg-white/12",
               )}
             >

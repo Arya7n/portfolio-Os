@@ -12,7 +12,7 @@ export function CalendarPanel() {
   const weekday = now.toLocaleDateString(undefined, { weekday: "long" });
 
   return (
-    <div className="w-[260px] p-4">
+    <div className="w-[min(100vw-24px,260px)] p-4">
       <p className="text-[11px] uppercase tracking-[0.14em] text-os-muted">{weekday}</p>
       <p className="mt-0.5 text-[15px] font-medium">{label}</p>
       <div className="mt-3 grid grid-cols-7 gap-y-1 text-center text-[11px]">

@@ -54,7 +54,7 @@ export function BootScreen() {
         <div className="noise absolute inset-0" />
       </div>
 
-      <div className="relative z-10 flex min-h-dvh flex-1 flex-col justify-between px-6 py-8 sm:px-14 sm:py-10">
+      <div className="relative z-10 flex min-h-dvh flex-1 flex-col justify-between px-4 py-7 sm:px-14 sm:py-10">
         <div>
           <p className="font-mono text-[11px] tracking-[0.28em] text-os-accent">KERNEL</p>
           <h1 className="mt-2 font-display text-4xl font-semibold tracking-tight sm:text-5xl">ARYAN</h1>
